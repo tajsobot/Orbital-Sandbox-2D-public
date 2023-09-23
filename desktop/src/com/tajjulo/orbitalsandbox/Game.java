@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -27,6 +28,8 @@ public class Game extends ApplicationAdapter {
 
 	private float deltaTime;
 
+	private PhysicsObject object1;
+
 	
 	@Override
 	public void create () {
@@ -34,6 +37,8 @@ public class Game extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(500, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
+		object1 = new PhysicsObject(0,10,100, new Vector2(10,10));
+
 	}
 
 	@Override
@@ -44,7 +49,8 @@ public class Game extends ApplicationAdapter {
 
 		doInputsCamera();
 		renderGrid();
-
+		renderObjects();
+		object1.update(Gdx.graphics.getDeltaTime());
 	}
 	
 	@Override
@@ -103,6 +109,13 @@ public class Game extends ApplicationAdapter {
 		shape.end();
 	}
 
+	public void renderObjects() {
+		shape.begin(ShapeRenderer.ShapeType.Filled);
+		shape.setColor(Color.BLACK);
+		shape.circle(object1.getPosX(), object1.getPosY(), 10);
+		shape.end();
+	}
+
 	public void doInputsCamera(){
 		int cameraSpeed = 200;
 		int cameraZoomSpeed = 1;
@@ -130,9 +143,6 @@ public class Game extends ApplicationAdapter {
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.E)){
 			camera.zoom += -cameraZoomSpeed * deltaTime * camera.zoom;
-
 		}
-
-
 	}
 }

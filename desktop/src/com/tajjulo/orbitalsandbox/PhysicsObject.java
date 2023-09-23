@@ -2,12 +2,13 @@ package com.tajjulo.orbitalsandbox;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.net.Socket;
 import java.util.Vector;
 
 public class PhysicsObject {
 
-    private long posX;
-    private long posY;
+    private float posX;
+    private float posY;
 
     private long mass;
     private Vector2 force;
@@ -15,11 +16,11 @@ public class PhysicsObject {
     private Vector2 velocity;
     private Vector2 acceleration;
 
+    //constructors
     public PhysicsObject(){
 
         posY = 0;
         posX = 0;
-
         mass = 1;
         force = new Vector2(0,0);
         velocity = new Vector2(0,0);
@@ -29,14 +30,27 @@ public class PhysicsObject {
     public PhysicsObject(long x, long y){
         posX = x;
         posY = y;
-
         mass = 1;
         force = new Vector2(0,0);
-
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
     }
+    public PhysicsObject(long x, long y, int mass, Vector2 velocity){
+        posX = x;
+        posY = y;
+        this.mass = mass;
+        force = new Vector2(0,0);
+        this.velocity = velocity;
+        acceleration = new Vector2(0,0);
+    }
 
+    public void update(float deltaTime){
+
+        velocity.x += acceleration.x * deltaTime;
+        velocity.y += acceleration.y * deltaTime;
+        posX += velocity.x * deltaTime;
+        posY += velocity.y * deltaTime;
+    }
     // setters, getters
 
     public void setAcceleration(Vector2 acceleration) {
@@ -67,11 +81,11 @@ public class PhysicsObject {
         return mass;
     }
 
-    public long getPosX() {
+    public float getPosX() {
         return posX;
     }
 
-    public long getPosY() {
+    public float getPosY() {
         return posY;
     }
 
