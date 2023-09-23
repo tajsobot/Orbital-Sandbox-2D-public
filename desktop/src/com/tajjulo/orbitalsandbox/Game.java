@@ -122,6 +122,7 @@ public class Game extends ApplicationAdapter {
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
 			camera.position.setZero();
 			camera.zoom = 1;
+			System.out.printf("reset");
 		}
 
 		if(Gdx.input.isKeyPressed(Input.Keys.Q)){
