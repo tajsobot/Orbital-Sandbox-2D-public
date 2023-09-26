@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import jdk.internal.icu.text.UnicodeSet;
 
 import java.security.Key;
 import java.sql.Time;
@@ -28,29 +29,40 @@ public class Game extends ApplicationAdapter {
 
 	private float deltaTime;
 
+	private PhysicsSpace space;
 	private PhysicsObject object1;
+	private PhysicsObject object2;
+	private PhysicsObject object3;
 
-	
 	@Override
 	public void create () {
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(500, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
-		object1 = new PhysicsObject(0,10,100, new Vector2(10,10));
 
+		space = new PhysicsSpace();
+		object1 = new PhysicsObject(0,10,1000000, new Vector2(10,40));
+		object2 = new PhysicsObject(50,100,1000000, new Vector2(10,10));
+		object3 = new PhysicsObject(100,100,1000000, new Vector2(0,20));
+		space.addObject(object1);
+		space.addObject(object2);
+		space.addObject(object3);
 	}
 
 	@Override
+	//main loop
 	public void render () {
 		deltaTime = Gdx.graphics.getDeltaTime();
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
 		viewport.apply();
 
 		doInputsCamera();
+
 		renderGrid();
 		renderObjects();
-		object1.update(Gdx.graphics.getDeltaTime());
+
+		doPhysics();
 	}
 	
 	@Override
@@ -62,8 +74,8 @@ public class Game extends ApplicationAdapter {
 		viewport.update(width, height);
 	}
 
-
 	//other methods
+
 
 	//tiled na 100 * 100 (100m * 100m box) na 4 smeri
 	public void renderGrid() {
@@ -113,7 +125,20 @@ public class Game extends ApplicationAdapter {
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 		shape.setColor(Color.BLACK);
 		shape.circle(object1.getPosX(), object1.getPosY(), 10);
+		shape.circle(object2.getPosX(), object2.getPosY(), 10);
+		shape.circle(object3.getPosX(), object3.getPosY(), 10);
+
+
 		shape.end();
+	}
+
+	public void doPhysics(){
+		space.updateAll(Gdx.graphics.getDeltaTime());
+/*		object1.updateKinematics(deltaTime);
+		object2.updateKinematics(deltaTime);
+
+		object1.updateGravity(object2, deltaTime);
+		object2.updateGravity(object1, deltaTime);*/
 	}
 
 	public void doInputsCamera(){
