@@ -10,14 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import jdk.internal.icu.text.UnicodeSet;
-
-import java.security.Key;
-import java.sql.Time;
 
 public class Game extends ApplicationAdapter {
 
@@ -128,17 +123,11 @@ public class Game extends ApplicationAdapter {
 		shape.circle(object2.getPosX(), object2.getPosY(), 10);
 		shape.circle(object3.getPosX(), object3.getPosY(), 10);
 
-
 		shape.end();
 	}
 
 	public void doPhysics(){
 		space.updateAll(Gdx.graphics.getDeltaTime());
-/*		object1.updateKinematics(deltaTime);
-		object2.updateKinematics(deltaTime);
-
-		object1.updateGravity(object2, deltaTime);
-		object2.updateGravity(object1, deltaTime);*/
 	}
 
 	public void doInputsCamera(){
@@ -162,12 +151,12 @@ public class Game extends ApplicationAdapter {
 			camera.zoom = 1;
 			System.out.printf("reset");
 		}
-
 		if(Gdx.input.isKeyPressed(Input.Keys.Q)){
 			camera.zoom += cameraZoomSpeed * deltaTime * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.E)){
 			camera.zoom += -cameraZoomSpeed * deltaTime * camera.zoom;
 		}
+
 	}
 }
