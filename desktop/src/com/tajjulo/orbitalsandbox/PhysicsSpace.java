@@ -38,4 +38,11 @@ public class PhysicsSpace {
         }
 
     }
+
+    public PhysicsObject getObjectAtIndex(int i) {
+        return objectList.get(i);
+    }
+    public int getSize(){
+        return objectList.size();
+    }
 }

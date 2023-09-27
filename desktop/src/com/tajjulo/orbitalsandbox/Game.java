@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -23,6 +24,7 @@ public class Game extends ApplicationAdapter {
 	private ExtendViewport viewport;
 
 	private float deltaTime;
+	private boolean justResized = false ;
 
 	private PhysicsSpace space;
 	private PhysicsObject object1;
@@ -37,18 +39,17 @@ public class Game extends ApplicationAdapter {
 		viewport.getCamera().position.set(0,0,0);
 
 		space = new PhysicsSpace();
-		object1 = new PhysicsObject(0,10,1000000, new Vector2(10,40));
-		object2 = new PhysicsObject(50,100,1000000, new Vector2(10,10));
-		object3 = new PhysicsObject(100,100,1000000, new Vector2(0,20));
+		object1 = new PhysicsObject(0,10,10000000, new Vector2(0,0));
+		object2 = new PhysicsObject(50,100,10, new Vector2(30,-60));
 		space.addObject(object1);
 		space.addObject(object2);
-		space.addObject(object3);
 	}
 
 	@Override
 	//main loop
 	public void render () {
 		deltaTime = Gdx.graphics.getDeltaTime();
+
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
 		viewport.apply();
 
@@ -56,6 +57,7 @@ public class Game extends ApplicationAdapter {
 
 		renderGrid();
 		renderObjects();
+
 
 		doPhysics();
 	}
@@ -68,9 +70,6 @@ public class Game extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		viewport.update(width, height);
 	}
-
-	//other methods
-
 
 	//tiled na 100 * 100 (100m * 100m box) na 4 smeri
 	public void renderGrid() {
@@ -121,7 +120,6 @@ public class Game extends ApplicationAdapter {
 		shape.setColor(Color.BLACK);
 		shape.circle(object1.getPosX(), object1.getPosY(), 10);
 		shape.circle(object2.getPosX(), object2.getPosY(), 10);
-		shape.circle(object3.getPosX(), object3.getPosY(), 10);
 
 		shape.end();
 	}
@@ -157,6 +155,12 @@ public class Game extends ApplicationAdapter {
 		if(Gdx.input.isKeyPressed(Input.Keys.E)){
 			camera.zoom += -cameraZoomSpeed * deltaTime * camera.zoom;
 		}
-
+		//smartes shit ever
+		for (int i = 0; i < space.getSize(); i++) {
+			if(Gdx.input.isKeyPressed(8 + i)) { // num1 je int 8
+				PhysicsObject targetObject = space.getObjectAtIndex(i);
+				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
+			}
+		}
 	}
 }

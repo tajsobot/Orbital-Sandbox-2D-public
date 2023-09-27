@@ -67,8 +67,9 @@ public class PhysicsObject {
 
         float forceScale = ((mass * obj.getMass())/distPow2) * G;
         Vector2 gravityForce = new Vector2(dir.x * forceScale, dir.y * forceScale);
-
-        force.add(gravityForce);
+        if (distPow2 > 40){
+            force.add(gravityForce);
+        }
     }
     public void updateFinish(){
         force.set(new Vector2(0, 0));
