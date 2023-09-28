@@ -39,10 +39,13 @@ public class Game extends ApplicationAdapter {
 		viewport.getCamera().position.set(0,0,0);
 
 		space = new PhysicsSpace();
-		object1 = new PhysicsObject(0,10,10000000, new Vector2(0,0));
-		object2 = new PhysicsObject(50,100,10, new Vector2(30,-60));
+		object1 = new PhysicsObject(-100,0,100000, new Vector2(0,4));
+		object2 = new PhysicsObject(100,0,100000, new Vector2(0,-4));
+		object3 = new PhysicsObject(50,100,10, new Vector2(5,-5));
 		space.addObject(object1);
 		space.addObject(object2);
+		space.addObject(object3);
+
 	}
 
 	@Override
@@ -56,8 +59,8 @@ public class Game extends ApplicationAdapter {
 		doInputsCamera();
 
 		renderGrid();
+		renderTraces();
 		renderObjects();
-
 
 		doPhysics();
 	}
@@ -118,9 +121,24 @@ public class Game extends ApplicationAdapter {
 	public void renderObjects() {
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 		shape.setColor(Color.BLACK);
-		shape.circle(object1.getPosX(), object1.getPosY(), 10);
-		shape.circle(object2.getPosX(), object2.getPosY(), 10);
 
+		for (int i = 0; i < space.getSize(); i++) {
+
+			PhysicsObject targetObject = space.getObjectAtIndex(i);
+			shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 10);
+		}
+		shape.end();
+	}
+	public void renderTraces(){
+		shape.begin(ShapeRenderer.ShapeType.Filled);
+		shape.setColor(Color.DARK_GRAY);
+		for (int i = 0; i < space.getSize(); i++) {
+			for (int j = 0; j < space.getObjectAtIndex(i).getTraces().size(); j++) {
+				float x = space.getObjectAtIndex(i).getTraces().get(j).x;
+				float y = space.getObjectAtIndex(i).getTraces().get(j).y;
+				shape.circle(x,y,2);
+			}
+		}
 		shape.end();
 	}
 

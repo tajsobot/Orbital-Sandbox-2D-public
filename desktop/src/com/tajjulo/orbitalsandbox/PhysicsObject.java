@@ -3,11 +3,14 @@ package com.tajjulo.orbitalsandbox;
 import com.badlogic.gdx.math.Vector2;
 
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Vector;
 
 public class PhysicsObject {
 
     private final float G = 10;
+    private final float maxDeltaTime = 0.1f;
 
     private float posX;
     private float posY;
@@ -17,6 +20,11 @@ public class PhysicsObject {
 
     private Vector2 velocity;
     private Vector2 acceleration;
+
+    private float timeElapsed;
+    private int tracerFrequency; //in Hz
+    private boolean doTraces = true;
+    private LinkedList<Vector2> traces;
 
     //constructors
     public PhysicsObject(){
@@ -36,6 +44,9 @@ public class PhysicsObject {
         force = new Vector2(0,0);
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
+
+        tracerFrequency = 5;
+        traces = new LinkedList<Vector2>();
     }
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
         posX = x;
@@ -44,16 +55,27 @@ public class PhysicsObject {
         force = new Vector2(0,0);
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
+
+        tracerFrequency = 5;
+        traces = new LinkedList<Vector2>();
     }
 
     public void updateKinematics(float deltaTime){
-
+        deltaTime = Math.min(maxDeltaTime, deltaTime);
         acceleration.x = force.x / mass * deltaTime;
         acceleration.y = force.y / mass * deltaTime;
         velocity.x += acceleration.x * deltaTime;
         velocity.y += acceleration.y * deltaTime;
         posX += velocity.x * deltaTime;
         posY += velocity.y * deltaTime;
+
+        if(doTraces){
+            timeElapsed += deltaTime;
+            if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
+                traces.add(new Vector2(posX, posY));
+                timeElapsed = 0;
+            }
+        }
     }
 
     public void updateGravity(PhysicsObject obj, float deltaTime){
@@ -75,6 +97,25 @@ public class PhysicsObject {
         force.set(new Vector2(0, 0));
     }
     // setters, getters
+    public void addPointToTracers(float x, float y){
+        traces.add(new Vector2(x,y));
+    }
+
+    public void setDoTraces(boolean doTraces) {
+        this.doTraces = doTraces;
+    }
+
+    public void setTracerFrequency(int tracerFrequency) {
+        this.tracerFrequency = tracerFrequency;
+    }
+
+    public int getTracerFrequency() {
+        return tracerFrequency;
+    }
+
+    public LinkedList<Vector2> getTraces() {
+        return traces;
+    }
 
     public void setAcceleration(Vector2 acceleration) {
         this.acceleration = acceleration;
