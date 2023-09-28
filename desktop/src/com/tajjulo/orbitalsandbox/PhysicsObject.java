@@ -10,7 +10,7 @@ import java.util.Vector;
 public class PhysicsObject {
 
     private final float G = 10;
-    private final float maxDeltaTime = 0.1f;
+    private final float maxDeltaTime = 0.05f;
 
     private float posX;
     private float posY;
