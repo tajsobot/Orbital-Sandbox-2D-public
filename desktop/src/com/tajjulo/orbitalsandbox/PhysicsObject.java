@@ -9,7 +9,7 @@ import java.util.Vector;
 
 public class PhysicsObject {
 
-    private final float G = 10;
+    private final float G = 1000;
     private final float maxDeltaTime = 0.05f;
 
     private float posX;
@@ -61,9 +61,8 @@ public class PhysicsObject {
     }
 
     public void updateKinematics(float deltaTime){
-        deltaTime = Math.min(maxDeltaTime, deltaTime);
-        acceleration.x = force.x / mass * deltaTime;
-        acceleration.y = force.y / mass * deltaTime;
+        acceleration.x = force.x / mass;
+        acceleration.y = force.y / mass;
         velocity.x += acceleration.x * deltaTime;
         velocity.y += acceleration.y * deltaTime;
         posX += velocity.x * deltaTime;
@@ -89,7 +88,7 @@ public class PhysicsObject {
 
         float forceScale = ((mass * obj.getMass())/distPow2) * G;
         Vector2 gravityForce = new Vector2(dir.x * forceScale, dir.y * forceScale);
-        if (distPow2 > 40){
+        if (distPow2 > 1){
             force.add(gravityForce);
         }
     }

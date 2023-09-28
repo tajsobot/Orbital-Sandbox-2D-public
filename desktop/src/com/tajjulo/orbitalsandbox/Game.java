@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import javax.swing.*;
+
 public class Game extends ApplicationAdapter {
 
 	private OrthographicCamera camera;
@@ -24,7 +26,9 @@ public class Game extends ApplicationAdapter {
 	private ExtendViewport viewport;
 
 	private float deltaTime;
-	private boolean justResized = false ;
+	private float accumulator = 0f;
+	private float fixedTimeStep = 1f / 150f; // 200 updates per second
+	private float timeStep;
 
 	private PhysicsSpace space;
 	private PhysicsObject object1;
@@ -39,12 +43,13 @@ public class Game extends ApplicationAdapter {
 		viewport.getCamera().position.set(0,0,0);
 
 		space = new PhysicsSpace();
-		object1 = new PhysicsObject(-100,0,100000, new Vector2(0,4));
-		object2 = new PhysicsObject(100,0,100000, new Vector2(0,-4));
-		object3 = new PhysicsObject(50,100,10, new Vector2(5,-5));
+
+		object1 = new PhysicsObject(-1000,0,100000, new Vector2(0,90));
+		object2 = new PhysicsObject(1000,0,100000, new Vector2(0,-90));
+//		object3 = new PhysicsObject(500,1000,10, new Vector2(50,-50));
 		space.addObject(object1);
 		space.addObject(object2);
-		space.addObject(object3);
+//		space.addObject(object3);
 
 	}
 
@@ -62,7 +67,17 @@ public class Game extends ApplicationAdapter {
 		renderTraces();
 		renderObjects();
 
-		doPhysics();
+		doPhysics(deltaTime);
+
+		System.out.println(Gdx.graphics.getFramesPerSecond());
+
+//		accumulator += deltaTime;
+//		while (accumulator >= fixedTimeStep) {
+//			// Update your physics here
+//			doPhysics(fixedTimeStep);
+//			accumulator -= fixedTimeStep;
+//		}
+//		System.out.println(Gdx.graphics.getFramesPerSecond());
 	}
 	
 	@Override
@@ -125,7 +140,7 @@ public class Game extends ApplicationAdapter {
 		for (int i = 0; i < space.getSize(); i++) {
 
 			PhysicsObject targetObject = space.getObjectAtIndex(i);
-			shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 10);
+			shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 50);
 		}
 		shape.end();
 	}
@@ -136,14 +151,14 @@ public class Game extends ApplicationAdapter {
 			for (int j = 0; j < space.getObjectAtIndex(i).getTraces().size(); j++) {
 				float x = space.getObjectAtIndex(i).getTraces().get(j).x;
 				float y = space.getObjectAtIndex(i).getTraces().get(j).y;
-				shape.circle(x,y,2);
+				shape.circle(x,y,10);
 			}
 		}
 		shape.end();
 	}
 
-	public void doPhysics(){
-		space.updateAll(Gdx.graphics.getDeltaTime());
+	public void doPhysics(float fixedDeltaTime){
+		space.updateAll(fixedDeltaTime);
 	}
 
 	public void doInputsCamera(){
