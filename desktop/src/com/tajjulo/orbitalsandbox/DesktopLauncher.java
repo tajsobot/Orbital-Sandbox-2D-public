@@ -9,7 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setIdleFPS(60);
-		config.setForegroundFPS(1000);
+		config.setForegroundFPS(200);
 		config.setTitle("Orbital Sandbox");
 		config.useVsync(false);
 		new Lwjgl3Application(new Game(), config);

@@ -21,9 +21,11 @@ public class PhysicsObject {
     private Vector2 velocity;
     private Vector2 acceleration;
 
+    private float minimalSimulationRadius = 10;
     private float timeElapsed;
     private int tracerFrequency; //in Hz
     private boolean doTraces = true;
+    private int maxTracers = 100;
     private LinkedList<Vector2> traces;
 
     //constructors
@@ -45,7 +47,7 @@ public class PhysicsObject {
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
 
-        tracerFrequency = 5;
+        tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
     }
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
@@ -56,7 +58,7 @@ public class PhysicsObject {
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
 
-        tracerFrequency = 5;
+        tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
     }
 
@@ -71,7 +73,7 @@ public class PhysicsObject {
         if(doTraces){
             timeElapsed += deltaTime;
             if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
-                traces.add(new Vector2(posX, posY));
+                addPointToTracers(posX, posY);
                 timeElapsed = 0;
             }
         }
@@ -88,7 +90,7 @@ public class PhysicsObject {
 
         float forceScale = ((mass * obj.getMass())/distPow2) * G;
         Vector2 gravityForce = new Vector2(dir.x * forceScale, dir.y * forceScale);
-        if (distPow2 > 1){
+        if (distPow2 > Math.pow(minimalSimulationRadius,2)){
             force.add(gravityForce);
         }
     }
@@ -98,6 +100,10 @@ public class PhysicsObject {
     // setters, getters
     public void addPointToTracers(float x, float y){
         traces.add(new Vector2(x,y));
+        System.out.println(traces.size());
+        if (traces.size() > maxTracers){
+            traces.remove(0);
+        }
     }
 
     public void setDoTraces(boolean doTraces) {
@@ -164,4 +170,3 @@ public class PhysicsObject {
         return velocity;
     }
 }
-//test

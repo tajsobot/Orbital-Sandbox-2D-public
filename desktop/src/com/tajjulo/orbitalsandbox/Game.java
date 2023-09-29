@@ -27,13 +27,15 @@ public class Game extends ApplicationAdapter {
 
 	private float deltaTime;
 	private float accumulator = 0f;
-	private float fixedTimeStep = 1f / 150f; // 200 updates per second
+	private float fixedTimeStep = 1f / 15000f; // 200 updates per second
 	private float timeStep;
 
 	private PhysicsSpace space;
 	private PhysicsObject object1;
 	private PhysicsObject object2;
 	private PhysicsObject object3;
+	private PhysicsObject object4;
+
 
 	@Override
 	public void create () {
@@ -45,11 +47,14 @@ public class Game extends ApplicationAdapter {
 		space = new PhysicsSpace();
 
 		object1 = new PhysicsObject(-1000,0,100000, new Vector2(0,90));
-		object2 = new PhysicsObject(1000,0,100000, new Vector2(0,-90));
-//		object3 = new PhysicsObject(500,1000,10, new Vector2(50,-50));
+		object2 = new PhysicsObject(1000,0,100000, new Vector2(0,-70));
+		object3 = new PhysicsObject(500,1000,10, new Vector2(100,-20));
+		object4 = new PhysicsObject(700,-100,5000, new Vector2(100,-20));
+
 		space.addObject(object1);
 		space.addObject(object2);
-//		space.addObject(object3);
+		space.addObject(object3);
+		space.addObject(object4);
 
 	}
 
@@ -67,17 +72,14 @@ public class Game extends ApplicationAdapter {
 		renderTraces();
 		renderObjects();
 
-		doPhysics(deltaTime);
-
-		System.out.println(Gdx.graphics.getFramesPerSecond());
-
-//		accumulator += deltaTime;
-//		while (accumulator >= fixedTimeStep) {
-//			// Update your physics here
-//			doPhysics(fixedTimeStep);
-//			accumulator -= fixedTimeStep;
-//		}
 //		System.out.println(Gdx.graphics.getFramesPerSecond());
+
+		accumulator += deltaTime;
+		while (accumulator >= fixedTimeStep) {
+			// Update your physics here
+			doPhysics(fixedTimeStep);
+			accumulator -= fixedTimeStep;
+		}
 	}
 	
 	@Override
@@ -194,6 +196,12 @@ public class Game extends ApplicationAdapter {
 				PhysicsObject targetObject = space.getObjectAtIndex(i);
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
 			}
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)){
+			space.addTimeScale(1);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_SUBTRACT)){
+			space.addTimeScale(-1);
 		}
 	}
 }
