@@ -100,7 +100,6 @@ public class PhysicsObject {
     // setters, getters
     public void addPointToTracers(float x, float y){
         traces.add(new Vector2(x,y));
-        System.out.println(traces.size());
         if (traces.size() > maxTracers){
             traces.remove(0);
         }

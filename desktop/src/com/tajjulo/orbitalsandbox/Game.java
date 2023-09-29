@@ -197,11 +197,14 @@ public class Game extends ApplicationAdapter {
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
 			}
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ADD)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
 			space.addTimeScale(1);
+			System.out.println(space.getTimeScale());
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.NUMPAD_SUBTRACT)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
 			space.addTimeScale(-1);
+			System.out.println(space.getTimeScale());
+
 		}
 	}
 }
