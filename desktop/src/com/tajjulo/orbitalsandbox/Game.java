@@ -27,7 +27,7 @@ public class Game extends ApplicationAdapter {
 
 	private float deltaTime;
 	private float accumulator = 0f;
-	private float fixedTimeStep = 1f / 15000f; // 200 updates per second
+	private float fixedTimeStep = 1f / 500f; // 200 updates per second
 	private float timeStep;
 
 	private PhysicsSpace space;
@@ -46,15 +46,15 @@ public class Game extends ApplicationAdapter {
 
 		space = new PhysicsSpace();
 
-		object1 = new PhysicsObject(-1000,0,100000, new Vector2(0,90));
-		object2 = new PhysicsObject(1000,0,100000, new Vector2(0,-70));
-		object3 = new PhysicsObject(500,1000,10, new Vector2(100,-20));
-		object4 = new PhysicsObject(700,-100,5000, new Vector2(100,-20));
+		object1 = new PhysicsObject(0,0,100000, new Vector2(0,0),true);
+		object2 = new PhysicsObject(500,0,1000, new Vector2(0,-400), false);
+		object3 = new PhysicsObject(1000,0,1000, new Vector2(0,-200), false);
+//		object4 = new PhysicsObject(700,-100,5000, new Vector2(100,-20));
 
 		space.addObject(object1);
 		space.addObject(object2);
 		space.addObject(object3);
-		space.addObject(object4);
+//		space.addObject(object4);
 
 	}
 
@@ -199,12 +199,16 @@ public class Game extends ApplicationAdapter {
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
 			space.addTimeScale(1);
-			System.out.println(space.getTimeScale());
+			System.out.println("Time scale: " + space.getTimeScale());
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
-			space.addTimeScale(-1);
-			System.out.println(space.getTimeScale());
-
+			if(space.getTimeScale() > 0) space.addTimeScale(-1);
+			System.out.println("Time scale: " + space.getTimeScale());
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
+			if(space.getTimeScale() == 0) space.setTimeScale(1);
+			else space.setTimeScale(0);
+			System.out.println("paused");
 		}
 	}
 }

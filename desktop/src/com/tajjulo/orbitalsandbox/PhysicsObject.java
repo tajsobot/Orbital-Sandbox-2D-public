@@ -21,6 +21,7 @@ public class PhysicsObject {
     private Vector2 velocity;
     private Vector2 acceleration;
 
+    private boolean isStatic;
     private float minimalSimulationRadius = 10;
     private float timeElapsed;
     private int tracerFrequency; //in Hz
@@ -37,6 +38,8 @@ public class PhysicsObject {
         force = new Vector2(0,0);
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
+        this.isStatic = false;
+
     }
 
     public PhysicsObject(long x, long y){
@@ -49,6 +52,20 @@ public class PhysicsObject {
 
         tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
+        this.isStatic = false;
+
+    }
+    public PhysicsObject(long x, long y, int mass, Vector2 velocity, boolean isStatic){
+        posX = x;
+        posY = y;
+        this.mass = mass;
+        force = new Vector2(0,0);
+        this.velocity = velocity;
+        acceleration = new Vector2(0,0);
+
+        tracerFrequency = 10;
+        traces = new LinkedList<Vector2>();
+        this.isStatic = isStatic;
     }
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
         posX = x;
@@ -60,21 +77,24 @@ public class PhysicsObject {
 
         tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
+        this.isStatic = true;
     }
 
     public void updateKinematics(float deltaTime){
-        acceleration.x = force.x / mass;
-        acceleration.y = force.y / mass;
-        velocity.x += acceleration.x * deltaTime;
-        velocity.y += acceleration.y * deltaTime;
-        posX += velocity.x * deltaTime;
-        posY += velocity.y * deltaTime;
+        if(!isStatic){
+            acceleration.x = force.x / mass;
+            acceleration.y = force.y / mass;
+            velocity.x += acceleration.x * deltaTime;
+            velocity.y += acceleration.y * deltaTime;
+            posX += velocity.x * deltaTime;
+            posY += velocity.y * deltaTime;
 
-        if(doTraces){
-            timeElapsed += deltaTime;
-            if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
-                addPointToTracers(posX, posY);
-                timeElapsed = 0;
+            if(doTraces){
+                timeElapsed += deltaTime;
+                if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
+                    addPointToTracers(posX, posY);
+                    timeElapsed = 0;
+                }
             }
         }
     }
