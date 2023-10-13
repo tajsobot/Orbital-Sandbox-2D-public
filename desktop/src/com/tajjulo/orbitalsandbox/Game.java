@@ -11,9 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import javax.swing.*;
 
@@ -24,24 +27,30 @@ public class Game extends ApplicationAdapter {
 	private ShapeRenderer shape;
 	private SpriteBatch batch;
 	private ExtendViewport viewport;
-
 	private float deltaTime;
 	private float accumulator = 0f;
 	private float fixedTimeStep = 1f / 500f; // 200 updates per second
 	private float timeStep;
-
 	private PhysicsSpace space;
+
 	private PhysicsObject object1;
 	private PhysicsObject object2;
 	private PhysicsObject object3;
 	private PhysicsObject object4;
+
+	private Stage spaceStage;
+	private GridActor gridActor;
+	private PlanetActor planetActor;
+
+	private Stage uiStage;
+	private UiActor uiActor;
 
 
 	@Override
 	public void create () {
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
-		viewport = new ExtendViewport(500, 500, camera);
+		viewport = new ExtendViewport(800, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
 
 		space = new PhysicsSpace();
@@ -56,8 +65,18 @@ public class Game extends ApplicationAdapter {
 		space.addObject(object3);
 //		space.addObject(object4);
 
-	}
+		gridActor = new GridActor();
+		planetActor = new PlanetActor();
+		uiActor = new UiActor();
 
+		spaceStage = new Stage(viewport);
+		spaceStage.addActor(gridActor);
+		spaceStage.addActor(planetActor);
+
+		uiStage = new Stage(new ScreenViewport());
+		spaceStage.addActor(uiActor);
+
+	}
 	@Override
 	//main loop
 	public void render () {
@@ -68,20 +87,22 @@ public class Game extends ApplicationAdapter {
 
 		doInputsCamera();
 
-		renderGrid();
+//		renderGrid();
 		renderTraces();
 		renderObjects();
 
-//		System.out.println(Gdx.graphics.getFramesPerSecond());
+		spaceStage.act(Gdx.graphics.getDeltaTime());
+		spaceStage.draw();
 
+		//PHZSICS
 		accumulator += deltaTime;
 		while (accumulator >= fixedTimeStep) {
 			// Update your physics here
 			doPhysics(fixedTimeStep);
 			accumulator -= fixedTimeStep;
 		}
+
 	}
-	
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -134,7 +155,6 @@ public class Game extends ApplicationAdapter {
 
 		shape.end();
 	}
-
 	public void renderObjects() {
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 		shape.setColor(Color.BLACK);
