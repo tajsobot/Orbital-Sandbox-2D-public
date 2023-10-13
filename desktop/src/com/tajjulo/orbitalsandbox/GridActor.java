@@ -15,7 +15,13 @@ public class GridActor extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        renderGrid();
+        renderTraces();
+    }
+    public void renderTraces(){
 
+    }
+    public void renderGrid(){
         shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
         int sqCount = 100;

@@ -17,8 +17,10 @@ public class UiActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.GREEN);
-        shape.rect(0,10, 640,50);
+        shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
+
+        shape.setColor(Color.GOLD);
+        shape.rect(0,10, 100,50);
         shape.end();
     }
 }

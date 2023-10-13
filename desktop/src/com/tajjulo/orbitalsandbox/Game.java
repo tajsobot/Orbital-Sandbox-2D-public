@@ -13,6 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -23,13 +27,15 @@ import javax.swing.*;
 public class Game extends ApplicationAdapter {
 
 	private OrthographicCamera camera;
+	private OrthographicCamera uiCamera;
+
 	private Texture buttonTexture;
 	private ShapeRenderer shape;
 	private SpriteBatch batch;
 	private ExtendViewport viewport;
 	private float deltaTime;
 	private float accumulator = 0f;
-	private float fixedTimeStep = 1f / 500f; // 200 updates per second
+	private float fixedTimeStep = 1f / 500f; // 500 updates per second
 	private float timeStep;
 	private PhysicsSpace space;
 
@@ -45,11 +51,15 @@ public class Game extends ApplicationAdapter {
 	private Stage uiStage;
 	private UiActor uiActor;
 
+	private Skin uiSkin;
+
 
 	@Override
 	public void create () {
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
+		uiCamera = new OrthographicCamera();
+
 		viewport = new ExtendViewport(800, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
 
@@ -58,24 +68,23 @@ public class Game extends ApplicationAdapter {
 		object1 = new PhysicsObject(0,0,100000, new Vector2(0,0),true);
 		object2 = new PhysicsObject(500,0,1000, new Vector2(0,-400), false);
 		object3 = new PhysicsObject(1000,0,1000, new Vector2(0,-200), false);
-//		object4 = new PhysicsObject(700,-100,5000, new Vector2(100,-20));
 
 		space.addObject(object1);
 		space.addObject(object2);
 		space.addObject(object3);
-//		space.addObject(object4);
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor();
+		planetActor.setSpaceobject(space);
+
 		uiActor = new UiActor();
 
 		spaceStage = new Stage(viewport);
 		spaceStage.addActor(gridActor);
 		spaceStage.addActor(planetActor);
 
-		uiStage = new Stage(new ScreenViewport());
+		uiStage = new Stage(new FitViewport(2,2, uiCamera));
 		spaceStage.addActor(uiActor);
-
 	}
 	@Override
 	//main loop
@@ -83,16 +92,10 @@ public class Game extends ApplicationAdapter {
 		deltaTime = Gdx.graphics.getDeltaTime();
 
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
-		viewport.apply();
-
 		doInputsCamera();
 
-//		renderGrid();
-		renderTraces();
-		renderObjects();
-
-		spaceStage.act(Gdx.graphics.getDeltaTime());
 		spaceStage.draw();
+		uiStage.draw();
 
 		//PHZSICS
 		accumulator += deltaTime;
@@ -101,7 +104,6 @@ public class Game extends ApplicationAdapter {
 			doPhysics(fixedTimeStep);
 			accumulator -= fixedTimeStep;
 		}
-
 	}
 	@Override
 	public void dispose () {
@@ -110,9 +112,9 @@ public class Game extends ApplicationAdapter {
 	}
 	public void resize(int width, int height) {
 		viewport.update(width, height);
+		camera.position.setZero();
 	}
 
-	//tiled na 100 * 100 (100m * 100m box) na 4 smeri
 	public void renderGrid() {
 		shape.setProjectionMatrix(viewport.getCamera().combined);
 		shape.begin(ShapeRenderer.ShapeType.Line);
