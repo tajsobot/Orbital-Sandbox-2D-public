@@ -1,4 +1,6 @@
-package com.tajjulo.orbitalsandbox;
+package com.tajjulo.orbitalsandbox.game;
+
+import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 
 import java.util.ArrayList;
 

@@ -1,15 +1,18 @@
-package com.tajjulo.orbitalsandbox;
+package com.tajjulo.orbitalsandbox.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.tajjulo.orbitalsandbox.game.PhysicsObject;
+import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 
 public class PlanetActor extends Actor {
     ShapeRenderer shape;
     PhysicsSpace space;
-    public PlanetActor() {
+    public PlanetActor(PhysicsSpace space1) {
         shape = new ShapeRenderer();
+        space = space1;
     }
 
     @Override
@@ -37,8 +40,5 @@ public class PlanetActor extends Actor {
             }
         }
         shape.end();
-    }
-    public void setSpaceobject(PhysicsSpace space1){
-        space = space1;
     }
 }

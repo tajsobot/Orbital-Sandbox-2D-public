@@ -1,4 +1,4 @@
-package com.tajjulo.orbitalsandbox;
+package com.tajjulo.orbitalsandbox.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;

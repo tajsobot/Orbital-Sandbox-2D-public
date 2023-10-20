@@ -1,11 +1,8 @@
-package com.tajjulo.orbitalsandbox;
+package com.tajjulo.orbitalsandbox.game;
 
 import com.badlogic.gdx.math.Vector2;
 
-import java.net.Socket;
 import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Vector;
 
 public class PhysicsObject {
 

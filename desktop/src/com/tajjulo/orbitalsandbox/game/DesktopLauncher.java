@@ -1,8 +1,8 @@
-package com.tajjulo.orbitalsandbox;
+package com.tajjulo.orbitalsandbox.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.tajjulo.orbitalsandbox.Game;
+import com.tajjulo.orbitalsandbox.game.Game;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
