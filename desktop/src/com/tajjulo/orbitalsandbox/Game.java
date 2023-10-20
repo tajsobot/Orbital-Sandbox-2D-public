@@ -52,8 +52,6 @@ public class Game extends ApplicationAdapter {
 	private UiActor uiActor;
 
 	private Skin uiSkin;
-
-
 	@Override
 	public void create () {
 		shape = new ShapeRenderer();
@@ -68,6 +66,7 @@ public class Game extends ApplicationAdapter {
 		object1 = new PhysicsObject(0,0,100000, new Vector2(0,0),true);
 		object2 = new PhysicsObject(500,0,1000, new Vector2(0,-400), false);
 		object3 = new PhysicsObject(1000,0,1000, new Vector2(0,-200), false);
+
 
 		space.addObject(object1);
 		space.addObject(object2);

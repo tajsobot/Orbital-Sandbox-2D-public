@@ -16,10 +16,6 @@ public class GridActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         renderGrid();
-        renderTraces();
-    }
-    public void renderTraces(){
-
     }
     public void renderGrid(){
         shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
