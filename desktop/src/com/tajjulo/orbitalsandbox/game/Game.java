@@ -52,12 +52,16 @@ public class Game extends ApplicationAdapter {
 
 		space = new PhysicsSpace();
 		object1 = new PhysicsObject(0,0,100000, new Vector2(0,0),true);
-		object2 = new PhysicsObject(500,0,1000, new Vector2(0,-400), false);
-		object3 = new PhysicsObject(1000,0,1000, new Vector2(0,-200), false);
+		object2 = new PhysicsObject(1500,0,1000, new Vector2(-120,200), false);
+		object3 = new PhysicsObject(1400,-1100,1000, new Vector2(200,100), false);
+		object4 = new PhysicsObject(1000,-149,6000, new Vector2(200,-100), false);
+
 
 		space.addObject(object1);
 		space.addObject(object2);
 		space.addObject(object3);
+		space.addObject(object4);
+
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
@@ -65,7 +69,7 @@ public class Game extends ApplicationAdapter {
 		spaceStage = new Stage(viewport);
 		spaceStage.addActor(gridActor);
 		spaceStage.addActor(planetActor);
-		uiLeft.renderUi();
+		uiLeft = new UiLeft();
 	}
 
 	@Override
@@ -78,6 +82,9 @@ public class Game extends ApplicationAdapter {
 		//draw
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
 		spaceStage.draw();
+
+		uiLeft.renderUi();
+
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
 		while (accumulator >= fixedTimeStep) {
@@ -134,7 +141,6 @@ public class Game extends ApplicationAdapter {
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
 			}
 		}
-
 	}
 
 	private int timeScaleSaved = 1;
@@ -150,15 +156,18 @@ public class Game extends ApplicationAdapter {
 			}
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
-			if(space.getTimeScale() == 0){
-				space.setTimeScale(timeScaleSaved);
-				System.out.println("unpaused");
-			}
-			else{
-				timeScaleSaved = space.getTimeScale();
-				space.setTimeScale(0);
-				System.out.println("paused");
-			}
+			toggleTime();
+		}
+	}
+	public void toggleTime(){
+		if(space.getTimeScale() == 0){
+			space.setTimeScale(timeScaleSaved);
+			System.out.println("unpaused");
+		}
+		else{
+			timeScaleSaved = space.getTimeScale();
+			space.setTimeScale(0);
+			System.out.println("paused");
 		}
 	}
 }
