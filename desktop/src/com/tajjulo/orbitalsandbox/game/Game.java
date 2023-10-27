@@ -65,11 +65,13 @@ public class Game extends ApplicationAdapter {
 		spaceStage = new Stage(viewport);
 		spaceStage.addActor(gridActor);
 		spaceStage.addActor(planetActor);
+		uiLeft.renderUi();
 	}
 
 	@Override
 	//main loop
 	public void render () {
+		viewport.apply();
 		//inputs
 		doInputsCamera();
 		doInputsSimulation();
@@ -95,70 +97,6 @@ public class Game extends ApplicationAdapter {
 		camera.position.setZero();
 	}
 
-	public void renderGrid() {
-		shape.setProjectionMatrix(viewport.getCamera().combined);
-		shape.begin(ShapeRenderer.ShapeType.Line);
-		int sqCount = 100;
-		int sqHeight = 100;
-		int sqWidth = 100;
-		//desno gori
-		shape.setColor(Color.WHITE);
-		for (int i = 0; i < 100; i++) {
-			for (int j = 0; j < 100; j++) {
-				shape.rect(i * sqWidth, j * sqHeight, sqWidth, sqHeight);
-			}
-		}
-		//levo gori
-		shape.setColor(Color.GREEN);
-		for (int i = 0; i < 100; i++) {
-			for (int j = 0; j < 100; j++) {
-				shape.rect(i * sqWidth - sqCount * sqWidth, j * sqHeight, sqWidth, sqHeight);
-			}
-		}
-		//levo doli
-		for (int i = 0; i < 100; i++) {
-			for (int j = 0; j < 100; j++) {
-				shape.setColor(Color.BLUE);
-				shape.rect(i * sqWidth - sqCount * sqWidth, j * sqHeight - sqCount * sqHeight, sqWidth, sqHeight);
-			}
-		}
-		//desmo doli
-		for (int i = 0; i < 100; i++) {
-			for (int j = 0; j < 100; j++) {
-				shape.setColor(Color.ORANGE);
-				shape.rect(i * sqWidth, j * sqHeight - sqCount * sqHeight, sqWidth, sqHeight);
-			}
-		}
-		//naredi linje
-		shape.setColor(Color.RED);
-		shape.line(-sqWidth * sqCount + 1.0f,0,sqWidth * sqCount * 1.0f,0);
-		shape.line(0, -sqHeight * sqCount,0, sqHeight * sqCount);
-		shape.end();
-	}
-
-	public void renderObjects() {
-		shape.begin(ShapeRenderer.ShapeType.Filled);
-		shape.setColor(Color.BLACK);
-		for (int i = 0; i < space.getSize(); i++) {
-			PhysicsObject targetObject = space.getObjectAtIndex(i);
-			shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 50);
-		}
-		shape.end();
-	}
-
-	public void renderTraces(){
-		shape.begin(ShapeRenderer.ShapeType.Filled);
-		shape.setColor(Color.DARK_GRAY);
-		for (int i = 0; i < space.getSize(); i++) {
-			for (int j = 0; j < space.getObjectAtIndex(i).getTraces().size(); j++) {
-				float x = space.getObjectAtIndex(i).getTraces().get(j).x;
-				float y = space.getObjectAtIndex(i).getTraces().get(j).y;
-				shape.circle(x,y,10);
-			}
-		}
-		shape.end();
-	}
-
 	public void doPhysics(float fixedDeltaTime){
 		space.updateAll(fixedDeltaTime);
 	}
@@ -167,16 +105,16 @@ public class Game extends ApplicationAdapter {
 		int cameraSpeed = 200;
 		int cameraZoomSpeed = 1;
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			camera.position.x += -cameraSpeed * deltaTime * camera.zoom;
+			camera.position.x += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			camera.position.x += cameraSpeed * deltaTime * camera.zoom;
+			camera.position.x += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)){
-			camera.position.y += cameraSpeed * deltaTime * camera.zoom;
+			camera.position.y += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.S)){
-			camera.position.y += -cameraSpeed * deltaTime * camera.zoom;
+			camera.position.y += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
 			camera.position.setZero();
@@ -184,10 +122,10 @@ public class Game extends ApplicationAdapter {
 			System.out.printf("reset");
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-			camera.zoom += cameraZoomSpeed * deltaTime * camera.zoom;
+			camera.zoom += cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.E)){
-			camera.zoom += -cameraZoomSpeed * deltaTime * camera.zoom;
+			camera.zoom += -cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		// 1 - 10 number inputs
 		for (int i = 0; i < space.getSize(); i++) {

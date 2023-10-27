@@ -23,7 +23,6 @@ public class PlanetActor extends Actor {
         shape.setColor(Color.BLACK);
 
         for (int i = 0; i < space.getSize(); i++) {
-
             PhysicsObject targetObject = space.getObjectAtIndex(i);
             shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 50);
         }
