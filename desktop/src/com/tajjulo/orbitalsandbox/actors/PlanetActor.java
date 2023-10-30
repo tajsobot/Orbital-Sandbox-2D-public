@@ -17,17 +17,11 @@ public class PlanetActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        //izrise planete
-        shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.BLACK);
+        drawTraces();
+        drawPlanets();
+    }
 
-        for (int i = 0; i < space.getSize(); i++) {
-            PhysicsObject targetObject = space.getObjectAtIndex(i);
-            shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 50);
-        }
-        shape.end();
-
+    public void drawTraces(){
         //izrise trace
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.DARK_GRAY);
@@ -37,6 +31,19 @@ public class PlanetActor extends Actor {
                 float y = space.getObjectAtIndex(i).getTraces().get(j).y;
                 shape.circle(x,y,10);
             }
+        }
+        shape.end();
+    }
+
+    public void drawPlanets(){
+        //izrise planete
+        shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.setColor(Color.BLACK);
+
+        for (int i = 0; i < space.getSize(); i++) {
+            PhysicsObject targetObject = space.getObjectAtIndex(i);
+            shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), 50);
         }
         shape.end();
     }

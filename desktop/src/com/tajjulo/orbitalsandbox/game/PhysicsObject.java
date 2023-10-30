@@ -26,17 +26,22 @@ public class PhysicsObject {
     private int maxTracers = 100;
     private LinkedList<Vector2> traces;
 
+    //za izrisovanje
+    private Vector2 forceForDrawing;
+    private float densety; // dL*M
+    private float planetRadius;
+
     //constructors
     public PhysicsObject(){
-
         posY = 0;
         posX = 0;
         mass = 1;
         force = new Vector2(0,0);
+        forceForDrawing = new Vector2(0,0);
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
         this.isStatic = false;
-
+        densety = 1;
     }
 
     public PhysicsObject(long x, long y){
@@ -44,41 +49,44 @@ public class PhysicsObject {
         posY = y;
         mass = 1;
         force = new Vector2(0,0);
+        forceForDrawing = new Vector2(0,0);
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
-
         tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = false;
-
+        densety = 1;
     }
     public PhysicsObject(long x, long y, int mass, Vector2 velocity, boolean isStatic){
         posX = x;
         posY = y;
         this.mass = mass;
         force = new Vector2(0,0);
+        forceForDrawing = new Vector2(0,0);
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
-
         tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = isStatic;
+        densety = 1;
     }
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
         posX = x;
         posY = y;
         this.mass = mass;
         force = new Vector2(0,0);
+        forceForDrawing = new Vector2(0,0);
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
-
         tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = true;
+        densety = 1;
     }
 
     public void updateKinematics(float deltaTime){
         if(!isStatic){
+            forceForDrawing.set(force);
             acceleration.x = force.x / mass;
             acceleration.y = force.y / mass;
             velocity.x += acceleration.x * deltaTime;
@@ -184,5 +192,9 @@ public class PhysicsObject {
 
     public Vector2 getVelocity() {
         return velocity;
+    }
+
+    public Vector2 getForceForDrawing() {
+        return forceForDrawing;
     }
 }

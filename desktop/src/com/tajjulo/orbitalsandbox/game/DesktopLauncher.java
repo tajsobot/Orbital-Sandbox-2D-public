@@ -1,5 +1,6 @@
 package com.tajjulo.orbitalsandbox.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.tajjulo.orbitalsandbox.game.Game;
@@ -11,7 +12,8 @@ public class DesktopLauncher {
 		config.setIdleFPS(60);
 		config.setForegroundFPS(144);
 		config.setTitle("Orbital Sandbox");
-		config.useVsync(false);
+		config.useVsync(true);
+		config.setWindowSizeLimits(1024,768, 5000,5000);
 		new Lwjgl3Application(new Game(), config);
 	}
 }

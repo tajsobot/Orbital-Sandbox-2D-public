@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
+import com.tajjulo.orbitalsandbox.actors.VectorActor;
 import com.tajjulo.orbitalsandbox.ui.UiLeft;
 
 public class Game extends ApplicationAdapter {
@@ -38,6 +39,7 @@ public class Game extends ApplicationAdapter {
 
 	private GridActor gridActor;
 	private PlanetActor planetActor;
+	private VectorActor vectorActor;
 
 	private UiLeft uiLeft;
 
@@ -52,9 +54,9 @@ public class Game extends ApplicationAdapter {
 
 		space = new PhysicsSpace();
 		object1 = new PhysicsObject(0,0,100000, new Vector2(0,0),true);
-		object2 = new PhysicsObject(1500,0,1000, new Vector2(-120,200), false);
-		object3 = new PhysicsObject(1400,-1100,1000, new Vector2(200,100), false);
-		object4 = new PhysicsObject(1000,-149,6000, new Vector2(200,-100), false);
+		object2 = new PhysicsObject(1000,0,1000, new Vector2(0,200), false);
+		object3 = new PhysicsObject(2000,0,1000, new Vector2(0,200), false);
+		object4 = new PhysicsObject(3000,0,6000, new Vector2(0,200), false);
 
 
 		space.addObject(object1);
@@ -65,11 +67,14 @@ public class Game extends ApplicationAdapter {
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
+		vectorActor = new VectorActor(space);
 
 		spaceStage = new Stage(viewport);
 		spaceStage.addActor(gridActor);
 		spaceStage.addActor(planetActor);
-		uiLeft = new UiLeft();
+		spaceStage.addActor(vectorActor);
+
+		uiLeft = new UiLeft(space);
 	}
 
 	@Override
@@ -79,6 +84,7 @@ public class Game extends ApplicationAdapter {
 		//inputs
 		doInputsCamera();
 		doInputsSimulation();
+		doUiInputs();
 		//draw
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
 		spaceStage.draw();
@@ -147,27 +153,45 @@ public class Game extends ApplicationAdapter {
 	public void doInputsSimulation(){
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
 			space.addTimeScale(1);
-			System.out.println("Time scale: " + space.getTimeScale());
+			uiLeft.setChangingText(Integer.toString(space.getTimeScale()) + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
 			if(space.getTimeScale() > 1){
 				space.addTimeScale(-1);
-				System.out.println("Time scale: " + space.getTimeScale());
 			}
+			uiLeft.setChangingText(Integer.toString(space.getTimeScale()) + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
 			toggleTime();
 		}
+
 	}
+
+	public void doUiInputs(){
+		if(uiLeft.getButtonPressID().equals("buttonPause")){
+			toggleTime();
+		}
+		if(uiLeft.getButtonPressID().equals("button1")){
+			toggleTime();
+		}
+		if(uiLeft.getButtonPressID().equals("button1")){
+			toggleTime();
+		}
+		if(uiLeft.getButtonPressID().equals("button1")){
+			toggleTime();
+		}
+		uiLeft.setButtonPressID("");
+	}
+
 	public void toggleTime(){
 		if(space.getTimeScale() == 0){
 			space.setTimeScale(timeScaleSaved);
-			System.out.println("unpaused");
+			uiLeft.setChangingText(Integer.toString(space.getTimeScale()) + "x");
 		}
 		else{
 			timeScaleSaved = space.getTimeScale();
 			space.setTimeScale(0);
-			System.out.println("paused");
+			uiLeft.setChangingText("paused");
 		}
 	}
 }
