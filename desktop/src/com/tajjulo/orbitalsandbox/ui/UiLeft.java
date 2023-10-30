@@ -77,7 +77,6 @@ public class UiLeft {
 
     public void renderUi(){
         stage.draw();
-        stage.setDebugAll(true);
         stage.act(Gdx.graphics.getDeltaTime());
     }
 

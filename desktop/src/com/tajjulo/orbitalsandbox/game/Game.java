@@ -3,7 +3,9 @@ package com.tajjulo.orbitalsandbox.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,23 +49,22 @@ public class Game extends ApplicationAdapter {
 	public void create () {
 
 		camera = new OrthographicCamera();
-		viewport = new ExtendViewport(800, 500, camera);
+		viewport = new ExtendViewport(500, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
+		camera.zoom = 10;
 
 		shape = new ShapeRenderer();
 
 		space = new PhysicsSpace();
-		object1 = new PhysicsObject(0,0,100000, new Vector2(0,0),true);
-		object2 = new PhysicsObject(1000,0,1000, new Vector2(0,200), false);
-		object3 = new PhysicsObject(2000,0,1000, new Vector2(0,200), false);
-		object4 = new PhysicsObject(3000,0,6000, new Vector2(0,200), false);
-
+		object1 = new PhysicsObject(0,0,10000000, new Vector2(0,0),false,10);
+		object2 = new PhysicsObject(5000,0,1000, new Vector2(0,1000), false,10);
+		object3 = new PhysicsObject(9000,0,1000, new Vector2(0,1000), false,10);
+		object4 = new PhysicsObject(12000,0,6000, new Vector2(0,1000), false,10);
 
 		space.addObject(object1);
 		space.addObject(object2);
 		space.addObject(object3);
 		space.addObject(object4);
-
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
@@ -80,24 +81,25 @@ public class Game extends ApplicationAdapter {
 	@Override
 	//main loop
 	public void render () {
-		viewport.apply();
 		//inputs
 		doInputsCamera();
 		doInputsSimulation();
 		doUiInputs();
+
 		//draw
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spaceStage.draw();
-
 		uiLeft.renderUi();
 
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
 		while (accumulator >= fixedTimeStep) {
-			// Update your physics here
 			doPhysics(fixedTimeStep);
 			accumulator -= fixedTimeStep;
 		}
+
+		viewport.apply();
 	}
 
 	@Override
@@ -119,6 +121,7 @@ public class Game extends ApplicationAdapter {
 		int cameraZoomSpeed = 1;
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
 			camera.position.x += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
+
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){
 			camera.position.x += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
@@ -131,7 +134,7 @@ public class Game extends ApplicationAdapter {
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
 			camera.position.setZero();
-			camera.zoom = 1;
+			camera.zoom = 10;
 			System.out.printf("reset");
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.Q)){

@@ -19,8 +19,8 @@ public class PhysicsObject {
     private Vector2 acceleration;
 
     private boolean isStatic;
-    private float minimalSimulationRadius = 10;
     private float timeElapsed;
+    private float minimalSimulationRadius = 20;
     private int tracerFrequency; //in Hz
     private boolean doTraces = true;
     private int maxTracers = 100;
@@ -30,6 +30,7 @@ public class PhysicsObject {
     private Vector2 forceForDrawing;
     private float densety; // dL*M
     private float planetRadius;
+    private final float minimumPlanetRadius = 10;
 
     //constructors
     public PhysicsObject(){
@@ -42,6 +43,8 @@ public class PhysicsObject {
         acceleration = new Vector2(0,0);
         this.isStatic = false;
         densety = 1;
+        updatePlanetRadius();
+
     }
 
     public PhysicsObject(long x, long y){
@@ -56,8 +59,10 @@ public class PhysicsObject {
         traces = new LinkedList<Vector2>();
         this.isStatic = false;
         densety = 1;
+        updatePlanetRadius();
+
     }
-    public PhysicsObject(long x, long y, int mass, Vector2 velocity, boolean isStatic){
+    public PhysicsObject(long x, long y, int mass, Vector2 velocity, boolean isStatic, float densety){
         posX = x;
         posY = y;
         this.mass = mass;
@@ -68,7 +73,9 @@ public class PhysicsObject {
         tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = isStatic;
-        densety = 1;
+        this.densety = densety;
+        updatePlanetRadius();
+
     }
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
         posX = x;
@@ -82,6 +89,7 @@ public class PhysicsObject {
         traces = new LinkedList<Vector2>();
         this.isStatic = true;
         densety = 1;
+        updatePlanetRadius();
     }
 
     public void updateKinematics(float deltaTime){
@@ -196,5 +204,12 @@ public class PhysicsObject {
 
     public Vector2 getForceForDrawing() {
         return forceForDrawing;
+    }
+
+    public float getPlanetRadius() {
+        return planetRadius;
+    }
+    public void updatePlanetRadius(){
+        planetRadius = (float) Math.cbrt(mass* 1.0f / (4f/3f) * densety * Math.PI);
     }
 }

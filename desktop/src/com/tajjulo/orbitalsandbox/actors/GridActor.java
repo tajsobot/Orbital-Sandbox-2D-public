@@ -21,8 +21,8 @@ public class GridActor extends Actor {
         shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
         int sqCount = 100;
-        int sqHeight = 100;
-        int sqWidth = 100;
+        int sqHeight = 1000;
+        int sqWidth = 1000;
 
         //desno gori
         shape.setColor(Color.WHITE);
