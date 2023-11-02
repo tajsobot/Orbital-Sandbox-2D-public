@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
+
+import java.util.List;
 
 public class PlanetActor extends Actor {
     ShapeRenderer shape;
@@ -31,20 +34,33 @@ public class PlanetActor extends Actor {
         drawPlanets();
         drawPlanets();
         drawShadedPlanets();
-
-
     }
 
     public void drawTraces(){
         //izrise trace
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.DARK_GRAY);
+        shadeColor = new Color(Color.BLACK);
+        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.4f);
+        shape.setColor(shadeColor);
+        float prevX = 0;
+        float prevY = 0;
+        float x = 0;
+        float y = 0;
+
         for (int i = 0; i < space.getSize(); i++) {
-            for (int j = 0; j < space.getObjectAtIndex(i).getTraces().size(); j++) {
-                float x = space.getObjectAtIndex(i).getTraces().get(j).x;
-                float y = space.getObjectAtIndex(i).getTraces().get(j).y;
-                shape.circle(x,y,5 );
+            List<Vector2> traces = space.getObjectAtIndex(i).getTraces();
+
+            for (int j = 0; j < traces.size(); j++) {
+                x = traces.get(j).x;
+                y = traces.get(j).y;
+                if (j > 0) {
+                    shape.rectLine(x, y, prevX, prevY, camera.zoom);
+                }
+                prevY = y;
+                prevX = x;
             }
+            prevY = 0;
+            prevX = 0;
         }
         shape.end();
     }

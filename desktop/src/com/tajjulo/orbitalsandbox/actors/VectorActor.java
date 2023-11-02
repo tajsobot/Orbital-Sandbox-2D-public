@@ -1,6 +1,7 @@
 package com.tajjulo.orbitalsandbox.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +11,7 @@ import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 
 
 public class VectorActor extends Actor {
+    private OrthographicCamera camera;
     private ShapeRenderer shape;
     private PhysicsSpace space;
 
@@ -37,6 +39,8 @@ public class VectorActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        camera = (OrthographicCamera) getStage().getCamera();
+        vectorGirth = camera.zoom/2 + 10;
         if(drawVelocity)
             drawVelocityVectors(Color.SKY);
         if(drawAcceleration)

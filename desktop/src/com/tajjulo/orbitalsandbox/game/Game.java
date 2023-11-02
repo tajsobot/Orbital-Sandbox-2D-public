@@ -3,22 +3,17 @@ package com.tajjulo.orbitalsandbox.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
-import com.tajjulo.orbitalsandbox.ui.UiLeft;
+import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
 public class Game extends ApplicationAdapter {
 
@@ -36,6 +31,8 @@ public class Game extends ApplicationAdapter {
 	private PhysicsObject object3;
 	private PhysicsObject object4;
 
+	private PhysicsObject object5;
+
 	private Stage spaceStage;
 	private Stage uiStage;
 
@@ -43,7 +40,7 @@ public class Game extends ApplicationAdapter {
 	private PlanetActor planetActor;
 	private VectorActor vectorActor;
 
-	private UiLeft uiLeft;
+	private UiCenter uiLeft;
 
 	@Override
 	public void create () {
@@ -57,14 +54,16 @@ public class Game extends ApplicationAdapter {
 
 		space = new PhysicsSpace();
 		object1 = new PhysicsObject(0,0,10000000, new Vector2(0,0),false,10);
-		object2 = new PhysicsObject(5000,0,1000, new Vector2(0,1000), false,10);
+		object2 = new PhysicsObject(5000,0,1000, new Vector2(0,1400), false,10);
 		object3 = new PhysicsObject(9000,0,1000, new Vector2(0,1000), false,10);
-		object4 = new PhysicsObject(12000,0,6000, new Vector2(0,1000), false,10);
+		object4 = new PhysicsObject(12000,0,6000, new Vector2(0,700), false,10);
+		object5 = new PhysicsObject(5000,5000,600000, new Vector2(-1500,500), false,10);
 
 		space.addObject(object1);
 		space.addObject(object2);
 		space.addObject(object3);
 		space.addObject(object4);
+		space.addObject(object5);
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
@@ -75,7 +74,7 @@ public class Game extends ApplicationAdapter {
 		spaceStage.addActor(planetActor);
 		spaceStage.addActor(vectorActor);
 
-		uiLeft = new UiLeft(space);
+		uiLeft = new UiCenter(space);
 	}
 
 	@Override

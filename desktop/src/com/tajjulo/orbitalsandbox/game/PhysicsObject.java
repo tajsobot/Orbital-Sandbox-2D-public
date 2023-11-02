@@ -21,9 +21,9 @@ public class PhysicsObject {
     private boolean isStatic;
     private float timeElapsed;
     private float minimalSimulationRadius = 20;
-    private int tracerFrequency; //in Hz
+    private int tracerFrequency = 30; //in Hz
     private boolean doTraces = true;
-    private int maxTracers = 100;
+    private int maxTracers = 500;
     private LinkedList<Vector2> traces;
 
     //za izrisovanje
@@ -55,7 +55,6 @@ public class PhysicsObject {
         forceForDrawing = new Vector2(0,0);
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
-        tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = false;
         densety = 1;
@@ -70,7 +69,6 @@ public class PhysicsObject {
         forceForDrawing = new Vector2(0,0);
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
-        tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = isStatic;
         this.densety = densety;
@@ -85,7 +83,6 @@ public class PhysicsObject {
         forceForDrawing = new Vector2(0,0);
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
-        tracerFrequency = 10;
         traces = new LinkedList<Vector2>();
         this.isStatic = true;
         densety = 1;
