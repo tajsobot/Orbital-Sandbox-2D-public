@@ -122,7 +122,6 @@ public class Game extends ApplicationAdapter {
 		int cameraZoomSpeed = 1;
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
 			camera.position.x += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
-
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){
 			camera.position.x += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
@@ -183,11 +182,10 @@ public class Game extends ApplicationAdapter {
 		if(uiCenter.getButtonPressID().equals("planetAdder")){
 			int randomNum1 = random.nextInt(10000) - 5000;
 			int randomNum2 = random.nextInt(10000) - 5000;
-			int randomNum3 = random.nextInt(3000) - 1500;
+			int randomNum3 = random.nextInt(10000);
 			int randomNum4 = random.nextInt(3000) - 1500;
-
-
-			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 + 200000, new Vector2(randomNum3, randomNum4), false, 10));
+			int randomNum5 = random.nextInt(3000) - 1500;
+			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 * 40, new Vector2(randomNum4, randomNum5), false, 10));
 		}
 		if(uiCenter.getButtonPressID().equals("button1")){
 			toggleTime();

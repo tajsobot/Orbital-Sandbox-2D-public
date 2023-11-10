@@ -1,16 +1,15 @@
 package com.tajjulo.orbitalsandbox.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
@@ -32,8 +31,67 @@ public class UiLeft {
 
     String buttonPressID;
 
-    public UiLeft(PhysicsSpace space){
+    OrthographicCamera camera;
+    Viewport viewport;
 
+
+    public UiLeft(PhysicsSpace space){
+        camera = new OrthographicCamera();
+        viewport = new ScreenViewport();
+        stage = new Stage(viewport);
+
+        font = new BitmapFont();
+        skin = new Skin();
+        buttonAtlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+        skin.addRegions(buttonAtlas);
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+
+        table = new Table();
+        table.setFillParent(true);
+
+        // TextButton
+        button = new TextButton("pause/play", textButtonStyle);
+        button.setName("buttonPause");
+        button.setPosition(2,2);
+        buttonPressID = "";
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                buttonPressID = actor.getName();
+            }
+        });
+        stage.addActor(button);
+
+        button = new TextButton("toggle vectors", textButtonStyle);
+        button.setPosition(2,20);
+        button.setName("buttonVectors");
+        buttonPressID = "";
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                buttonPressID = actor.getName();
+            }
+        });
+        stage.addActor(button);
+
+        button = new TextButton("Add Random planet", textButtonStyle);
+        button.setPosition(2,40);
+        button.setName("planetAdder");
+        buttonPressID = "";
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                buttonPressID = actor.getName();
+            }
+        });
+        stage.addActor(button);
+
+        Gdx.input.setInputProcessor(stage);
+
+        // Add UI elements to the stage
+        stage.setViewport(viewport);
+        stage.addActor(table);
     }
 
     public void renderUi(){
@@ -63,5 +121,8 @@ public class UiLeft {
                     }
                 })
         ));
+    }
+    public void updatecamera(int width, int height){
+        viewport.update(width, height);
     }
 }
