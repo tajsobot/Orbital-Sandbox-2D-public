@@ -15,6 +15,8 @@ import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
 import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
+import java.util.Random;
+
 public class Game extends ApplicationAdapter {
 
 	private ExtendViewport viewport;
@@ -40,7 +42,7 @@ public class Game extends ApplicationAdapter {
 	private PlanetActor planetActor;
 	private VectorActor vectorActor;
 
-	private UiCenter uiLeft;
+	private UiCenter uiCenter;
 
 	@Override
 	public void create () {
@@ -74,7 +76,7 @@ public class Game extends ApplicationAdapter {
 		spaceStage.addActor(planetActor);
 		spaceStage.addActor(vectorActor);
 
-		uiLeft = new UiCenter(space);
+		uiCenter = new UiCenter(space);
 	}
 
 	@Override
@@ -89,7 +91,7 @@ public class Game extends ApplicationAdapter {
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spaceStage.draw();
-		uiLeft.renderUi();
+		uiCenter.renderUi();
 
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
@@ -97,7 +99,6 @@ public class Game extends ApplicationAdapter {
 			doPhysics(fixedTimeStep);
 			accumulator -= fixedTimeStep;
 		}
-
 		viewport.apply();
 	}
 
@@ -109,6 +110,7 @@ public class Game extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		viewport.update(width, height);
 		camera.position.setZero();
+		uiCenter.updatecamera(width, height);
 	}
 
 	public void doPhysics(float fixedDeltaTime){
@@ -134,7 +136,6 @@ public class Game extends ApplicationAdapter {
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
 			camera.position.setZero();
 			camera.zoom = 10;
-			System.out.printf("reset");
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.Q)){
 			camera.zoom += cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
@@ -143,11 +144,14 @@ public class Game extends ApplicationAdapter {
 			camera.zoom += -cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		// 1 - 10 number inputs
-		for (int i = 0; i < space.getSize(); i++) {
+		for (int i = 0; i < Math.max(space.getSize(), 10) ; i++) {
 			if(Gdx.input.isKeyPressed(8 + i)) { // num1 je int 8
 				PhysicsObject targetObject = space.getObjectAtIndex(i);
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
 			}
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+			Gdx.app.exit();
 		}
 	}
 
@@ -155,45 +159,51 @@ public class Game extends ApplicationAdapter {
 	public void doInputsSimulation(){
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
 			space.addTimeScale(1);
-			uiLeft.setChangingText(Integer.toString(space.getTimeScale()) + "x");
+			uiCenter.setChangingText(Integer.toString(space.getTimeScale()) + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
 			if(space.getTimeScale() > 1){
 				space.addTimeScale(-1);
 			}
-			uiLeft.setChangingText(Integer.toString(space.getTimeScale()) + "x");
+			uiCenter.setChangingText(Integer.toString(space.getTimeScale()) + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
 			toggleTime();
 		}
-
 	}
 
 	public void doUiInputs(){
-		if(uiLeft.getButtonPressID().equals("buttonPause")){
+		if(uiCenter.getButtonPressID().equals("buttonPause")){
 			toggleTime();
 		}
-		if(uiLeft.getButtonPressID().equals("button1")){
+		if(uiCenter.getButtonPressID().equals("buttonVectors")){
+			vectorActor.toggleVectors();
+		}
+		Random random = new Random();
+		if(uiCenter.getButtonPressID().equals("planetAdder")){
+			int randomNum1 = random.nextInt(10000) - 5000;
+			int randomNum2 = random.nextInt(10000) - 5000;
+			int randomNum3 = random.nextInt(3000) - 1500;
+			int randomNum4 = random.nextInt(3000) - 1500;
+
+
+			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 + 200000, new Vector2(randomNum3, randomNum4), false, 10));
+		}
+		if(uiCenter.getButtonPressID().equals("button1")){
 			toggleTime();
 		}
-		if(uiLeft.getButtonPressID().equals("button1")){
-			toggleTime();
-		}
-		if(uiLeft.getButtonPressID().equals("button1")){
-			toggleTime();
-		}
-		uiLeft.setButtonPressID("");
+		uiCenter.setButtonPressID("");
 	}
 
 	public void toggleTime(){
 		if(space.getTimeScale() == 0){
 			space.setTimeScale(timeScaleSaved);
-			uiLeft.setChangingText(Integer.toString(space.getTimeScale()) + "x");
+			uiCenter.setChangingText(Integer.toString(space.getTimeScale()) + "x");
 		}
 		else{
 			timeScaleSaved = space.getTimeScale();
 			space.setTimeScale(0);
-			uiLeft.setChangingText("paused");
+			uiCenter.setChangingText("paused");
 		}
 	}
 }

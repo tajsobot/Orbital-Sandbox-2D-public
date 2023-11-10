@@ -20,6 +20,7 @@ public class VectorActor extends Actor {
 
     private float width;
     private float vectorGirth = 20;
+    private boolean vectorToggle;
 
     public VectorActor(PhysicsSpace space1) {
         shape = new ShapeRenderer();
@@ -27,6 +28,7 @@ public class VectorActor extends Actor {
         width = 3f;
         drawVelocity = true;
         drawAcceleration = true;
+        vectorToggle = false;
     }
 
     public VectorActor(PhysicsSpace space1, boolean drawVelocity, boolean drawAcceleration) {
@@ -35,16 +37,20 @@ public class VectorActor extends Actor {
         width = 3f;
         this.drawVelocity = drawVelocity;
         this.drawAcceleration = drawAcceleration;
+        vectorToggle = false;
+
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        camera = (OrthographicCamera) getStage().getCamera();
-        vectorGirth = camera.zoom/2 + 10;
-        if(drawVelocity)
-            drawVelocityVectors(Color.SKY);
-        if(drawAcceleration)
-            drawAccelerationVectors(Color.GOLD, 1f);
+        if(vectorToggle){
+            camera = (OrthographicCamera) getStage().getCamera();
+            vectorGirth = camera.zoom/2 + 10;
+            if(drawVelocity)
+                drawVelocityVectors(Color.SKY);
+            if(drawAcceleration)
+                drawAccelerationVectors(Color.GOLD, 1f);
+        }
     }
 
     public void drawVelocityVectors(Color color){
@@ -99,5 +105,8 @@ public class VectorActor extends Actor {
 
     public void setDrawVelocity(boolean drawVelocity) {
         this.drawVelocity = drawVelocity;
+    }
+    public void toggleVectors(){
+        vectorToggle = !vectorToggle;
     }
 }

@@ -9,10 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
@@ -40,7 +37,7 @@ public class UiCenter {
 
     public UiCenter(PhysicsSpace space){
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(400,400, camera);
+        viewport = new ScreenViewport();
         stage = new Stage(viewport);
 
         font = new BitmapFont();
@@ -58,8 +55,33 @@ public class UiCenter {
         table.add(changingLabel).center();
 
         // TextButton
-        button = new TextButton("asdasda", textButtonStyle);
+        button = new TextButton("pause/play", textButtonStyle);
         button.setName("buttonPause");
+        button.setPosition(2,2);
+        buttonPressID = "";
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                buttonPressID = actor.getName();
+            }
+        });
+        stage.addActor(button);
+
+        button = new TextButton("toggle vectors", textButtonStyle);
+        button.setPosition(2,20);
+        button.setName("buttonVectors");
+        buttonPressID = "";
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                buttonPressID = actor.getName();
+            }
+        });
+        stage.addActor(button);
+
+        button = new TextButton("Add Random planet", textButtonStyle);
+        button.setPosition(2,40);
+        button.setName("planetAdder");
         buttonPressID = "";
         button.addListener(new ChangeListener() {
             @Override
@@ -104,4 +126,7 @@ public class UiCenter {
             })
         ));
     }
+    public void updatecamera(int width, int height){
+        viewport.update(width, height);
+        }
 }
