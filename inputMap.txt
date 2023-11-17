@@ -1,0 +1,1 @@
+{posX="0",posY="0",mass="1000",speedX="1000",speedY="231",isStatic="0",density="10"}

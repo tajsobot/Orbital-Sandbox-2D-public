@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
+import com.tajjulo.orbitalsandbox.tools.PlanetMap;
 import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
 import java.util.Random;
@@ -76,6 +77,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		space.addObject(object3);
 		space.addObject(object4);
 		space.addObject(object5);
+
+		PlanetMap planetMap = new PlanetMap();
+//		try {
+//			space = planetMap.convertTextToMap();
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
