@@ -18,8 +18,6 @@ public class PlanetActor extends Actor {
     PhysicsSpace space;
     OrthographicCamera camera;
     Color shadeColor;
-
-
     public PlanetActor(PhysicsSpace space1) {
         shape = new ShapeRenderer();
         space = space1;
@@ -78,7 +76,6 @@ public class PlanetActor extends Actor {
         shape.end();
     }
     public void drawShadedPlanets(){
-
         shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shadeColor = new Color(Color.BLACK);
@@ -90,6 +87,13 @@ public class PlanetActor extends Actor {
             shape.circle(space.getObjectAtIndex(i).getPosX(), space.getObjectAtIndex(i).getPosY(), camera.zoom * 5);
         }
         shape.end();
+    }
+    public void drawOutline(){
+
+    }
+
+    public static void planetClicked(int index){
+
     }
 
     public void setShadeColor(Color color, float shading) {

@@ -14,7 +14,6 @@ public class VectorActor extends Actor {
     private OrthographicCamera camera;
     private ShapeRenderer shape;
     private PhysicsSpace space;
-
     private boolean drawVelocity;
     private boolean drawAcceleration;
 

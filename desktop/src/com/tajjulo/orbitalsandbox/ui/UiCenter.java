@@ -90,10 +90,6 @@ public class UiCenter {
             }
         });
         stage.addActor(button);
-
-        Gdx.input.setInputProcessor(stage);
-
-        // Add UI elements to the stage
         stage.setViewport(viewport);
         stage.addActor(table);
     }
@@ -128,5 +124,9 @@ public class UiCenter {
     }
     public void updatecamera(int width, int height){
         viewport.update(width, height);
-        }
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
 }

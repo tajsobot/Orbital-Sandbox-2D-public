@@ -1,12 +1,12 @@
 package com.tajjulo.orbitalsandbox.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.InstanceData;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -17,7 +17,7 @@ import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
 import java.util.Random;
 
-public class Game extends ApplicationAdapter {
+public class Game extends ApplicationAdapter implements InputProcessor {
 
 	private ExtendViewport viewport;
 	private OrthographicCamera camera;
@@ -36,7 +36,8 @@ public class Game extends ApplicationAdapter {
 	private PhysicsObject object5;
 
 	private Stage spaceStage;
-	private Stage uiStage;
+	private Stage UiCenterStage;
+	private Stage UiLeftStage;
 
 	private GridActor gridActor;
 	private PlanetActor planetActor;
@@ -44,8 +45,17 @@ public class Game extends ApplicationAdapter {
 
 	private UiCenter uiCenter;
 
+	private Stage uiStage;
+
 	@Override
 	public void create () {
+
+//		InputProcessor inputProcessorOne = new CustomInputProcessorOne();
+//		InputProcessor inputProcessorTwo = new CustomInputProcessorTwo();
+//		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+//		inputMultiplexer.addProcessor(stage);
+//		inputMultiplexer.addProcessor(inputProcessorTwo);
+//		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(500, 500, camera);
@@ -77,10 +87,15 @@ public class Game extends ApplicationAdapter {
 		spaceStage.addActor(vectorActor);
 
 		uiCenter = new UiCenter(space);
-	}
 
+		uiStage = uiCenter.getStage();
+
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(uiStage);
+		multiplexer.addProcessor(this);
+		Gdx.input.setInputProcessor(multiplexer);
+	}
 	@Override
-	//main loop
 	public void render () {
 		//inputs
 		doInputsCamera();
@@ -91,7 +106,7 @@ public class Game extends ApplicationAdapter {
 		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spaceStage.draw();
-		uiCenter.renderUi();
+		uiStage.draw();
 
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
@@ -204,4 +219,54 @@ public class Game extends ApplicationAdapter {
 			uiCenter.setChangingText("paused");
 		}
 	}
+	@Override public boolean mouseMoved (int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		return false;
+	}
+
+	@Override public boolean touchDown (int screenX, int screenY, int pointer, int button) {
+		for (int i = 0; i < space.getSize(); i++) {
+			float planetRadius = space.getObjectAtIndex(i).getPlanetRadius();
+			float posX = space.getObjectAtIndex(i).getPosX();
+			float posY = space.getObjectAtIndex(i).getPosY();
+			Vector3 clickPos = new Vector3(screenX, screenY, 0);
+			camera.unproject(clickPos);
+
+			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius ){
+				System.out.println(i);
+
+			}
+		}
+		return true;
+	}
+
+	@Override public boolean touchDragged (int screenX, int screenY, int pointer) {
+		return true;
+	}
+
+	@Override public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+		return true;
+	}
+
+	@Override
+	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override public boolean keyDown (int keycode) {
+		return false;
+	}
+
+	@Override public boolean keyUp (int keycode) {
+		return false;
+	}
+
+	@Override public boolean keyTyped (char character) {
+		return false;
+	}
+
 }
