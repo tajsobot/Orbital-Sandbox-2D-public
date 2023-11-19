@@ -1,10 +1,10 @@
 package com.tajjulo.orbitalsandbox.tools;
 
+import com.badlogic.gdx.math.Vector2;
+import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
@@ -12,21 +12,24 @@ import java.util.ArrayList;
 //  {posX="0",posY="0",mass="1000",speedX="1000",speedY="1000",isStatic="0",density="10"}
 public class PlanetMap {
 
-    private final String[] dataNames = {"posX","posY","mass","speedX","speedY","isStatic","density" };
+    private final String[] dataNames = {"posX","posY","mass","speedX","speedY","isStatic","density"};
 
     private String inputFileName;
     private String outputFileName;
 
-    private PhysicsSpace physicsSpace;
     private ArrayList<int[]> list;
+    private PhysicsSpace physicsSpace;
 
-    public void planetMap(){
-        this.inputFileName = "C:\\Users\\K01-DM-04\\IdeaProjects\\Orbital-Sandbox-2D\\inputMap.txt";
-        this.outputFileName = "outputMap.txt";
+    public PlanetMap(){
+        inputFileName = "inputMap.txt";
+        outputFileName = "outputMap.txt";
+        list = new ArrayList<int[]>();
     }
-    public void planetMap(String inputFileName, String outputFileName) {
+
+    public PlanetMap(String inputFileName, String outputFileName) {
         this.inputFileName = inputFileName;
         this.outputFileName = outputFileName;
+        list = new ArrayList<int[]>();
     }
 
     private int[] lineToArray(String line){
@@ -39,7 +42,6 @@ public class PlanetMap {
             char currentChar;
             int count = 0;
             while((currentChar = line.charAt(beginIndex + count)) != '"') {
-                System.out.print(currentChar + ", ");
                 endIndex = beginIndex + count + 1;
                 count++;
             }
@@ -49,17 +51,25 @@ public class PlanetMap {
         }
         return arr;
     }
-    public void convertMapToText(){
 
+    //iz physiscs space naredi txt file
+    public void convertMapToText(){
+        //todo
     }
+
+    //vrne physiscs space za simulacijo
     public PhysicsSpace convertTextToMap() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\K01-DM-04\\IdeaProjects\\Orbital-Sandbox-2D\\inputMap.txt"));
+        physicsSpace = new PhysicsSpace();
+        BufferedReader reader = new BufferedReader(new FileReader(inputFileName));
         String line;
         while ((line = reader.readLine()) != null){
             list.add(lineToArray(line));
         }
-
-        return null;
+        for (int i = 0; i < list.size(); i++) {
+            int[] arr = list.get(i);
+            physicsSpace.addObject(new PhysicsObject(arr[0], arr[1], arr[2], new Vector2(arr[3], arr[4]),arr[5] != 0, arr[6]));
+        }
+        return physicsSpace;
     }
 
     @Override
@@ -70,5 +80,21 @@ public class PlanetMap {
                 ", physicsSpace=" + physicsSpace +
                 ", list=" + list +
                 '}';
+    }
+
+    public void setInputFileName(String inputFileName) {
+        this.inputFileName = inputFileName;
+    }
+
+    public void setOutputFileName(String outputFileName) {
+        this.outputFileName = outputFileName;
+    }
+
+    public String getInputFileName() {
+        return inputFileName;
+    }
+
+    public String getOutputFileName() {
+        return outputFileName;
     }
 }

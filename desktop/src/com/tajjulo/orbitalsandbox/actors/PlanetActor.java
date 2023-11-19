@@ -18,9 +18,12 @@ public class PlanetActor extends Actor {
     PhysicsSpace space;
     OrthographicCamera camera;
     Color shadeColor;
+    int clickPlanetIndex;
+
     public PlanetActor(PhysicsSpace space1) {
         shape = new ShapeRenderer();
         space = space1;
+        clickPlanetIndex = -1;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class PlanetActor extends Actor {
         drawPlanets();
         drawPlanets();
         drawShadedPlanets();
+        drawOutline();
     }
 
     public void drawTraces(){
@@ -89,11 +93,20 @@ public class PlanetActor extends Actor {
         shape.end();
     }
     public void drawOutline(){
-
+        if(clickPlanetIndex >= 0){
+            shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
+            shape.begin(ShapeRenderer.ShapeType.Line);
+            shape.setColor(Color.WHITE);
+            float x = space.getObjectAtIndex(clickPlanetIndex).getPosX();
+            float y = space.getObjectAtIndex(clickPlanetIndex).getPosY();
+            float radius = space.getObjectAtIndex(clickPlanetIndex).getPlanetRadius();
+            shape.circle(x,y,radius);
+            shape.end();
+        }
     }
 
-    public static void planetClicked(int index){
-
+    public void setPlanetClicked(int index){
+        clickPlanetIndex = index;
     }
 
     public void setShadeColor(Color color, float shading) {

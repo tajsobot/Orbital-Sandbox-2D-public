@@ -48,6 +48,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	private Stage uiStage;
 
+	PlanetMap planetMap;
 	@Override
 	public void create () {
 
@@ -78,12 +79,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		space.addObject(object4);
 		space.addObject(object5);
 
-		PlanetMap planetMap = new PlanetMap();
-//		try {
-//			space = planetMap.convertTextToMap();
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
+		planetMap = new PlanetMap();
+		try {
+			space = planetMap.convertTextToMap();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
@@ -111,7 +112,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		doUiInputs();
 
 		//draw
-		ScreenUtils.clear(0.5f,0.5f, 0.5f, 1 );
+		ScreenUtils.clear(0.4f,0.4f, 0.4f, 1 );
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spaceStage.draw();
 		uiStage.draw();
@@ -244,10 +245,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			Vector3 clickPos = new Vector3(screenX, screenY, 0);
 			camera.unproject(clickPos);
 
-			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius ){
-				System.out.println(i);
-
+			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
+				planetActor.setPlanetClicked(i);
+				break;
 			}
+			else planetActor.setPlanetClicked(-1);
+
 		}
 		return true;
 	}

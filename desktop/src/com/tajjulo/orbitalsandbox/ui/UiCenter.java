@@ -94,11 +94,6 @@ public class UiCenter {
         stage.addActor(table);
     }
 
-    public void renderUi(){
-        stage.draw();
-        stage.act(Gdx.graphics.getDeltaTime());
-    }
-
     public String getButtonPressID() {
         return buttonPressID;
     }
