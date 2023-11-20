@@ -55,6 +55,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		try {
+			planetMap.convertMapToText(space);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);

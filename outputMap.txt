@@ -1,0 +1,4 @@
+{posX="0",posY="0",mass="1000000",speedX="1000",speedY="231",isStatic="1",density="10"}
+{posX="1000",posY="0",mass="2",speedX="0",speedY="1000",isStatic="0",density="10"}
+{posX="2000",posY="0",mass="2",speedX="0",speedY="700",isStatic="0",density="10"}
+{posX="3000",posY="0",mass="2",speedX="0",speedY="700",isStatic="0",density="10"}

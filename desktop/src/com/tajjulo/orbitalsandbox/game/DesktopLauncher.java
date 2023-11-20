@@ -12,8 +12,8 @@ public class DesktopLauncher {
 		config.setForegroundFPS(144);
 		config.setTitle("Orbital Sandbox");
 		config.useVsync(true);
-		Graphics.DisplayMode displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
-		config.setFullscreenMode(displayMode);
+//		Graphics.DisplayMode displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
+//		config.setFullscreenMode(displayMode);
 		config.setWindowSizeLimits(1024,768, 5000,5000);
 		new Lwjgl3Application(new Game(), config);
 	}

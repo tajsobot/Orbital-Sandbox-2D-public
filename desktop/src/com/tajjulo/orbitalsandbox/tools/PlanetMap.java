@@ -4,8 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
 //  format:
@@ -45,7 +44,6 @@ public class PlanetMap {
                 endIndex = beginIndex + count + 1;
                 count++;
             }
-
             String value = line.substring(beginIndex, endIndex);
             arr[i] = Integer.valueOf(value);
         }
@@ -53,8 +51,23 @@ public class PlanetMap {
     }
 
     //iz physiscs space naredi txt file
-    public void convertMapToText(){
-        //todo
+    public void convertMapToText(PhysicsSpace physicsSpace1) throws Exception {
+        physicsSpace = physicsSpace1;
+        PrintWriter printWriter = new PrintWriter(outputFileName);
+        for (int i = 0; i < physicsSpace.getSize(); i++) {
+            PhysicsObject po = physicsSpace.getObjectAtIndex(i);
+            int isStatic = 0;
+            if(po.getIsStatic()) isStatic = 1;
+            printWriter.println(
+                    "{posX=\"" + (int)po.getPosX() +
+                    "\",posY=\""+ (int)po.getPosY() +
+                    "\",mass=\"" + (int)po.getMass() +
+                    "\",speedX=\"" + (int)po.getVelocity().x +
+                    "\",speedY=\"" + (int)po.getVelocity().y +
+                    "\",isStatic=\"" + (int)isStatic +
+                    "\",density=\"" + (int)po.getDensity() + "\"}");
+        }
+        printWriter.close();
     }
 
     //vrne physiscs space za simulacijo

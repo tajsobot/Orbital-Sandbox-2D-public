@@ -28,7 +28,7 @@ public class PhysicsObject {
 
     //za izrisovanje
     private Vector2 forceForDrawing;
-    private float densety; // dL*M
+    private float density; // dL*M
     private float planetRadius;
     private final float minimumPlanetRadius = 10;
 
@@ -42,7 +42,7 @@ public class PhysicsObject {
         velocity = new Vector2(0,0);
         acceleration = new Vector2(0,0);
         this.isStatic = false;
-        densety = 1;
+        density = 1;
         updatePlanetRadius();
     }
 
@@ -56,7 +56,7 @@ public class PhysicsObject {
         acceleration = new Vector2(0,0);
         traces = new LinkedList<Vector2>();
         this.isStatic = false;
-        densety = 1;
+        density = 1;
         updatePlanetRadius();
     }
 
@@ -70,7 +70,7 @@ public class PhysicsObject {
         acceleration = new Vector2(0,0);
         traces = new LinkedList<Vector2>();
         this.isStatic = isStatic;
-        this.densety = densety;
+        this.density = densety;
         updatePlanetRadius();
     }
 
@@ -84,7 +84,7 @@ public class PhysicsObject {
         acceleration = new Vector2(0,0);
         traces = new LinkedList<Vector2>();
         this.isStatic = true;
-        densety = 1;
+        density = 1;
         updatePlanetRadius();
     }
 
@@ -185,6 +185,14 @@ public class PhysicsObject {
         return posY;
     }
 
+    public boolean getIsStatic() {
+        return isStatic;
+    }
+
+    public float getDensity() {
+        return density;
+    }
+
     public Vector2 getAcceleration() {
         return acceleration;
     }
@@ -206,6 +214,6 @@ public class PhysicsObject {
     }
 
     public void updatePlanetRadius(){
-        planetRadius = (float) Math.cbrt(mass* 1.0f / (4f/3f) * densety * Math.PI);
+        planetRadius = (float) Math.cbrt(mass* 1.0f / (4f/3f) * density * Math.PI);
     }
 }
