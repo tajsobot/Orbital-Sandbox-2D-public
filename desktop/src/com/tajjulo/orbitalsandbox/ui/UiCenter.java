@@ -24,6 +24,8 @@ public class UiCenter {
     TextureAtlas buttonAtlas;
     Table table;
     Label changingLabel;
+    Table labelTable;
+    ScrollPane scrollPane;
 
     PhysicsSpace space;
     String textTimeScale;
@@ -33,6 +35,8 @@ public class UiCenter {
 
     OrthographicCamera camera;
     Viewport viewport;
+
+    private Timer.Task changingTextTask;
 
     public UiCenter(PhysicsSpace space){
         camera = new OrthographicCamera();
@@ -91,6 +95,51 @@ public class UiCenter {
         stage.addActor(button);
         stage.setViewport(viewport);
         stage.addActor(table);
+
+        labelTable = new Table();
+
+        // Create a scroll pane and add the table to it
+        scrollPane = new ScrollPane(labelTable);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+
+        // Add the scroll pane to the stage
+        stage.addActor(scrollPane);
+
+        // Position the scroll pane on the middle-left side of the screen
+        scrollPane.setPosition(0, stage.getHeight() / 2f - scrollPane.getHeight() / 2f);
+
+        //todo
+        addNewLabel("pep");
+        addNewLabel("opek");
+        addNewLabel("opek");
+        addNewLabel("opek");
+        addNewLabel("opek");
+        addNewLabel("opek");
+    }
+
+    public void addNewLabel(String labelText) {
+        // Create a new label with the provided text
+        Label label = new Label(labelText,  new Label.LabelStyle(font, Color.WHITE));
+
+        // Add qthe label to the table
+        labelTable.add(label).expandX().fillX().padLeft(5).row();
+
+        // Scroll to the bottom to show the latest label
+        labelTable.layout();
+        labelTable.invalidate();
+        scrollPane.setScrollPercentY(1);
+    }
+
+    public void render(float delta) {
+        // Update and render the stage
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+    }
+
+    public void resize(int width, int height) {
+        // Update the stage's viewport when the screen is resized
+        stage.getViewport().update(width, height, true);
     }
 
     public String getButtonPressID() {
@@ -103,18 +152,21 @@ public class UiCenter {
 
     public void setChangingText(String text) {
         changingLabel.setText(text);
-
         changingLabel.clearActions();
 
-        changingLabel.addAction(Actions.sequence(
-            Actions.delay(0.5f),
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    changingLabel.setText(""); // Set the text back to an empty string
-                }
-            })
-        ));
+        // Cancel any existing task
+        if (changingTextTask != null) {
+            changingTextTask.cancel();
+        }
+        // Schedule a new task
+        changingTextTask = new Timer.Task() {
+            @Override
+            public void run() {
+                changingLabel.setText(""); // Set the text back to an empty string
+            }
+        };
+
+        Timer.schedule(changingTextTask, 0.5f);
     }
 
     public void updatecamera(int width, int height){

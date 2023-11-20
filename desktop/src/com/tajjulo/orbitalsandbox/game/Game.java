@@ -164,7 +164,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
 			if(space.getTimeScale() > 1){
 				space.addTimeScale(-1);
-			}
+			}else space.setTimeScale(1);
 			uiCenter.setChangingText(space.getTimeScale() + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
