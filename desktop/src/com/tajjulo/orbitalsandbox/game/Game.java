@@ -3,7 +3,6 @@ package com.tajjulo.orbitalsandbox.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.InstanceData;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -26,59 +25,30 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	private float deltaTime;
 	private float accumulator = 0f;
-	private float fixedTimeStep = 1f / 500f; // 500 updates per second
 
 	private PhysicsSpace space;
-	private PhysicsObject object1;
-	private PhysicsObject object2;
-	private PhysicsObject object3;
-	private PhysicsObject object4;
-
-	private PhysicsObject object5;
 
 	private Stage spaceStage;
-	private Stage UiCenterStage;
-	private Stage UiLeftStage;
 
 	private GridActor gridActor;
 	private PlanetActor planetActor;
 	private VectorActor vectorActor;
 
 	private UiCenter uiCenter;
-
 	private Stage uiStage;
 
 	PlanetMap planetMap;
 	@Override
 	public void create () {
-
-//		InputProcessor inputProcessorOne = new CustomInputProcessorOne();
-//		InputProcessor inputProcessorTwo = new CustomInputProcessorTwo();
-//		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-//		inputMultiplexer.addProcessor(stage);
-//		inputMultiplexer.addProcessor(inputProcessorTwo);
-//		Gdx.input.setInputProcessor(inputMultiplexer);
-
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(500, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
 		camera.zoom = 10;
 
 		shape = new ShapeRenderer();
-
 		space = new PhysicsSpace();
-		object1 = new PhysicsObject(0,0,10000000, new Vector2(0,0),false,10);
-		object2 = new PhysicsObject(5000,0,1000, new Vector2(0,1400), false,10);
-		object3 = new PhysicsObject(9000,0,1000, new Vector2(0,1000), false,10);
-		object4 = new PhysicsObject(12000,0,6000, new Vector2(0,700), false,10);
-		object5 = new PhysicsObject(5000,5000,600000, new Vector2(-1500,500), false,10);
 
-		space.addObject(object1);
-		space.addObject(object2);
-		space.addObject(object3);
-		space.addObject(object4);
-		space.addObject(object5);
-
+		//nastavi planete vun iz txt fila
 		planetMap = new PlanetMap();
 		try {
 			space = planetMap.convertTextToMap();
@@ -119,6 +89,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
+		// 500 updates per second
+		float fixedTimeStep = 1f / 500f;
 		while (accumulator >= fixedTimeStep) {
 			doPhysics(fixedTimeStep);
 			accumulator -= fixedTimeStep;
@@ -182,13 +154,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public void doInputsSimulation(){
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
 			space.addTimeScale(1);
-			uiCenter.setChangingText(Integer.toString(space.getTimeScale()) + "x");
+			uiCenter.setChangingText(space.getTimeScale() + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
 			if(space.getTimeScale() > 1){
 				space.addTimeScale(-1);
 			}
-			uiCenter.setChangingText(Integer.toString(space.getTimeScale()) + "x");
+			uiCenter.setChangingText(space.getTimeScale() + "x");
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
 			toggleTime();
@@ -220,7 +192,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public void toggleTime(){
 		if(space.getTimeScale() == 0){
 			space.setTimeScale(timeScaleSaved);
-			uiCenter.setChangingText(Integer.toString(space.getTimeScale()) + "x");
+			uiCenter.setChangingText(space.getTimeScale() + "x");
 		}
 		else{
 			timeScaleSaved = space.getTimeScale();

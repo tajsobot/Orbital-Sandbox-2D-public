@@ -30,7 +30,7 @@ public class GridActor extends Actor {
 
         //desno gori
         Color shadeColor = new Color(Color.WHITE);
-        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.2f);
+        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.3f);
         shape.setColor(shadeColor);
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {
@@ -39,7 +39,7 @@ public class GridActor extends Actor {
         }
         //levo gori
         shadeColor = new Color(Color.GREEN);
-        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.2f);
+        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.3f);
         shape.setColor(shadeColor);
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {
@@ -47,7 +47,7 @@ public class GridActor extends Actor {
             }
         }
         shadeColor = new Color(Color.BLUE);
-        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.2f);
+        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.3f);
         shape.setColor(shadeColor);
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {
@@ -56,7 +56,7 @@ public class GridActor extends Actor {
         }
         //desmo doli
         shadeColor = new Color(Color.ORANGE);
-        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.2f);
+        shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.3f);
         shape.setColor(shadeColor);
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {

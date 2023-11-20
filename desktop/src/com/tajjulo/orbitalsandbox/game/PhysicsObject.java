@@ -44,7 +44,6 @@ public class PhysicsObject {
         this.isStatic = false;
         densety = 1;
         updatePlanetRadius();
-
     }
 
     public PhysicsObject(long x, long y){
@@ -59,8 +58,8 @@ public class PhysicsObject {
         this.isStatic = false;
         densety = 1;
         updatePlanetRadius();
-
     }
+
     public PhysicsObject(long x, long y, int mass, Vector2 velocity, boolean isStatic, float densety){
         posX = x;
         posY = y;
@@ -73,8 +72,8 @@ public class PhysicsObject {
         this.isStatic = isStatic;
         this.densety = densety;
         updatePlanetRadius();
-
     }
+
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
         posX = x;
         posY = y;
@@ -115,7 +114,6 @@ public class PhysicsObject {
         float distPow2 = (float) (Math.pow(obj.getPosX() - posX,2) + Math.pow(obj.getPosY() - posY,2));
         dir.x = obj.getPosX() - posX;
         dir.y = obj.getPosY() - posY;
-
         dir.nor();
 
         float forceScale = ((mass * obj.getMass())/distPow2) * G;
@@ -206,6 +204,7 @@ public class PhysicsObject {
     public float getPlanetRadius() {
         return planetRadius;
     }
+
     public void updatePlanetRadius(){
         planetRadius = (float) Math.cbrt(mass* 1.0f / (4f/3f) * densety * Math.PI);
     }

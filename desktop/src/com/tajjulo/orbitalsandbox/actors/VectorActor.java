@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 
-
 public class VectorActor extends Actor {
     private OrthographicCamera camera;
     private ShapeRenderer shape;
@@ -37,7 +36,6 @@ public class VectorActor extends Actor {
         this.drawVelocity = drawVelocity;
         this.drawAcceleration = drawAcceleration;
         vectorToggle = false;
-
     }
 
     @Override
@@ -105,6 +103,7 @@ public class VectorActor extends Actor {
     public void setDrawVelocity(boolean drawVelocity) {
         this.drawVelocity = drawVelocity;
     }
+
     public void toggleVectors(){
         vectorToggle = !vectorToggle;
     }

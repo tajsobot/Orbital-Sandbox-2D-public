@@ -34,7 +34,6 @@ public class UiCenter {
     OrthographicCamera camera;
     Viewport viewport;
 
-
     public UiCenter(PhysicsSpace space){
         camera = new OrthographicCamera();
         viewport = new ScreenViewport();
@@ -117,6 +116,7 @@ public class UiCenter {
             })
         ));
     }
+
     public void updatecamera(int width, int height){
         viewport.update(width, height);
     }
