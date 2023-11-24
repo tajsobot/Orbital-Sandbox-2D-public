@@ -38,6 +38,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	private Stage uiStage;
 
 	PlanetMap planetMap;
+	private int planetClickIndex;
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
@@ -72,7 +73,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 		uiCenter = new UiCenter(space);
 		uiStage = uiCenter.getStage();
-		uiCenter.setPlanetClicked(-1);
+		planetClickIndex = -1;
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiStage);
@@ -89,9 +90,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		//draw
 		ScreenUtils.clear(0.4f,0.4f, 0.4f, 1 );
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		spaceStage.draw();
-		uiStage.draw();
-		uiCenter.doPlanetInfoLabels();
+
 
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
@@ -102,6 +101,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			accumulator -= fixedTimeStep;
 		}
 		viewport.apply();
+
+		spaceStage.draw();
+		uiStage.draw();
+		uiCenter.doPlanetInfoLabels();
+
 	}
 
 	@Override
@@ -151,6 +155,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
 				planetActor.setPlanetClicked(i);
 				uiCenter.setPlanetClicked(i);
+				planetClickIndex = i;
 			}
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -172,6 +177,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
 			toggleTime();
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) || Gdx.input.isKeyJustPressed(Input.Keys.DEL)){
+			if(planetClickIndex >= 0){
+				space.removeObject(planetClickIndex);
+				System.out.println("remove");
+			}
 		}
 	}
 
@@ -227,6 +238,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
 				planetActor.setPlanetClicked(i);
+				planetClickIndex = i;
 				uiCenter.setPlanetClicked(i);
 				uiCenter.doPlanetInfoLabels();
 				break;
@@ -234,6 +246,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			else{
 				planetActor.setPlanetClicked(-1);
 				uiCenter.setPlanetClicked(-1);
+				planetClickIndex = -1;
 			}
 
 		}

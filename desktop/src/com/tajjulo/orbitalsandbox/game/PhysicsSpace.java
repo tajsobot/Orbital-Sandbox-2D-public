@@ -11,7 +11,6 @@ public class PhysicsSpace {
 
     public PhysicsSpace(){
         objectList = new ArrayList<PhysicsObject>();
-
     }
 
     public void addObject(PhysicsObject object){
@@ -36,7 +35,10 @@ public class PhysicsSpace {
     }
 
     public PhysicsObject getObjectAtIndex(int i) {
-        return objectList.get(i);
+        if(i < objectList.size()){
+            return objectList.get(i);
+        }
+        return objectList.get(0);
     }
 
     public int getSize(){
@@ -57,5 +59,10 @@ public class PhysicsSpace {
 
     public void addTimeScale(int addValue){
         timeScale += addValue;
+    }
+    public void removeObject(int index){
+
+        objectList.remove(index);
+
     }
 }
