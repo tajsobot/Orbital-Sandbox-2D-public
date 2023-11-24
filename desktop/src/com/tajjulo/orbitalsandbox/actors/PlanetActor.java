@@ -92,6 +92,7 @@ public class PlanetActor extends Actor {
         }
         shape.end();
     }
+
     public void drawOutline(){
         if(clickPlanetIndex >= 0){
             shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
@@ -100,7 +101,8 @@ public class PlanetActor extends Actor {
             float x = space.getObjectAtIndex(clickPlanetIndex).getPosX();
             float y = space.getObjectAtIndex(clickPlanetIndex).getPosY();
             float radius = space.getObjectAtIndex(clickPlanetIndex).getPlanetRadius();
-            shape.circle(x,y,radius);
+
+            shape.circle(x,y,Math.max(radius, camera.zoom * 5));
             shape.end();
         }
     }

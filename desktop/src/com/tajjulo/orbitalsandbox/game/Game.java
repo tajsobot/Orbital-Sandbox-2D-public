@@ -71,8 +71,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		spaceStage.addActor(vectorActor);
 
 		uiCenter = new UiCenter(space);
-
 		uiStage = uiCenter.getStage();
+		uiCenter.setPlanetClicked(-1);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(uiStage);
@@ -91,6 +91,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		spaceStage.draw();
 		uiStage.draw();
+		uiCenter.doPlanetInfoLabels();
 
 		//physics
 		accumulator += Gdx.graphics.getDeltaTime();
@@ -148,6 +149,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			if(Gdx.input.isKeyPressed(8 + i)) { // num1 je int 8
 				PhysicsObject targetObject = space.getObjectAtIndex(i);
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
+				planetActor.setPlanetClicked(i);
+				uiCenter.setPlanetClicked(i);
 			}
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -225,9 +228,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
 				planetActor.setPlanetClicked(i);
 				uiCenter.setPlanetClicked(i);
+				uiCenter.doPlanetInfoLabels();
 				break;
 			}
-			else planetActor.setPlanetClicked(-1);
+			else{
+				planetActor.setPlanetClicked(-1);
+				uiCenter.setPlanetClicked(-1);
+			}
 
 		}
 		return true;

@@ -43,15 +43,15 @@ public class UiCenter {
     Viewport viewport;
 
     PhysicsObject physicsObject;
-    int clickPlanetIndex;
+    int clickPlanetIndex = -1;
 
     private Timer.Task changingTextTask;
 
     public UiCenter(PhysicsSpace space){
+        this.space = space;
         camera = new OrthographicCamera();
         viewport = new ScreenViewport();
         stage = new Stage(viewport);
-        stage.setDebugAll(true);
 
         font = new BitmapFont();
         skin = new Skin();
@@ -64,7 +64,7 @@ public class UiCenter {
         table.setFillParent(true);
 
         // Create a Label with an empty string
-        changingLabel = new Label("123", new Label.LabelStyle(font, Color.WHITE));
+        changingLabel = new Label("", new Label.LabelStyle(font, Color.WHITE));
         table.add(changingLabel).center();
         stage.addActor(table);
 
@@ -83,8 +83,8 @@ public class UiCenter {
         button = createButton("Add Random planet", "planetAdder", 5);
         buttonTable.add(button);
 
-        buttonTable.pad(5);
-        buttonTable.setPosition(500,0);
+        buttonTable.pad(5).bottom();
+        buttonTable.setPosition(Gdx.graphics.getWidth()/2f, buttonTable.getY());
 
         stage.setViewport(viewport);
         stage.addActor(buttonTable);
@@ -104,13 +104,16 @@ public class UiCenter {
 
         clickPlanetIndex = -1;
 
-        labels = new Label[3];
+        labels = new Label[5];
         Label label;
-        labels[0] = new Label("mass: ",  new Label.LabelStyle(font, Color.WHITE));
-        labels[1] = new Label("velocity X: ",  new Label.LabelStyle(font, Color.WHITE));
-        labels[2] = new Label("velocity Y: " ,  new Label.LabelStyle(font, Color.WHITE));
+        labels[0] = new Label("mass: ", new Label.LabelStyle(font, Color.WHITE));
+        labels[1] = new Label("velocity X: ", new Label.LabelStyle(font, Color.WHITE));
+        labels[2] = new Label("velocity Y: " , new Label.LabelStyle(font, Color.WHITE));
+        labels[3] = new Label("acceleration X: ", new Label.LabelStyle(font, Color.WHITE));
+        labels[4] = new Label("acceleration Y: ", new Label.LabelStyle(font, Color.WHITE));
         for (int i = 0; i < labels.length; i++) {
-            labelTable.add(labels[i]);
+            labelTable.add(labels[i]).expandX().fillX().row();
+            labelTable.pad(3);
         }
     }
 
@@ -118,9 +121,6 @@ public class UiCenter {
         // Update and render the stage
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        if(clickPlanetIndex > 0){
-            doPlanetInfoLabels();
-        }
     }
 
     public void resize(int width, int height) {
@@ -128,13 +128,20 @@ public class UiCenter {
         stage.getViewport().update(width, height, true);
     }
     public void doPlanetInfoLabels() {
-        physicsObject = space.getObjectAtIndex(clickPlanetIndex);
-        Label[] labels = new Label[3];
-        Label label;
-        labels[0] = new Label("mass: " + physicsObject.getMass(),  new Label.LabelStyle(font, Color.WHITE));
-        labels[1] = new Label("velocity X: " + physicsObject.getVelocity().x,  new Label.LabelStyle(font, Color.WHITE));
-        labels[2] = new Label("velocity Y: " + physicsObject.getVelocity().y,  new Label.LabelStyle(font, Color.WHITE));
-
+        if(clickPlanetIndex >= 0){
+            PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
+            labels[0].setText("mass: " + po.getMass());
+            labels[1].setText("velocity x: " + po.getVelocity().x);
+            labels[2].setText("velocity y: " + po.getVelocity().y);
+            labels[3].setText("velocity x: " + po.getAcceleration().x);
+            labels[4].setText("velocity y: " + po.getAcceleration().y);
+        }else {
+            labels[0].setText("");
+            labels[1].setText("");
+            labels[2].setText("");
+            labels[3].setText("");
+            labels[4].setText("");
+        }
     }
     public String getButtonPressID() {
         return buttonPressID;

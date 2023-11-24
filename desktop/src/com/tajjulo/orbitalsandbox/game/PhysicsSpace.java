@@ -27,7 +27,6 @@ public class PhysicsSpace {
                     }
                 }
             }
-
             //kinematics + finish
             for (int i = 0; i < objectList.size(); i++) {
                 objectList.get(i).updateKinematics(deltaTime);
