@@ -144,7 +144,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			camera.zoom += -cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		// 1 - 10 number inputs
-		for (int i = 0; i < Math.max(space.getSize(), 10) ; i++) {
+		for (int i = 0; i < Math.min(space.getSize(), 10) ; i++) {
 			if(Gdx.input.isKeyPressed(8 + i)) { // num1 je int 8
 				PhysicsObject targetObject = space.getObjectAtIndex(i);
 				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
@@ -224,6 +224,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
 				planetActor.setPlanetClicked(i);
+				uiCenter.setPlanetClicked(i);
 				break;
 			}
 			else planetActor.setPlanetClicked(-1);
