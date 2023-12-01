@@ -98,7 +98,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		// 500 updates per second
 		float fixedTimeStep = 1f / 500f;
 		while (accumulator >= fixedTimeStep) {
-			doPhysics(fixedTimeStep);
+			int negTime = 1;
+			if(space.getTimeScale() < 0){
+				negTime = -1;
+			}
+			doPhysics(negTime * fixedTimeStep);
 			accumulator -= fixedTimeStep;
 		}
 		viewport.apply();
@@ -233,14 +237,18 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		}
 	}
 	public void decreaseTime(){
-		if(space.getTimeScale() > 1){
+		if (space.getTimeScale() == 1)toggleTime();
+		else {
 			space.addTimeScale(-1);
-		} else space.setTimeScale(1);
-		uiCenter.setChangingText(space.getTimeScale() + "x");
+			uiCenter.setChangingText(space.getTimeScale() + "x");
+		}
 	}
-	public void  increaseTime(){
-		space.addTimeScale(1);
-		uiCenter.setChangingText(space.getTimeScale() + "x");
+	public void increaseTime(){
+		if (space.getTimeScale() == -1) toggleTime();
+		else {
+			space.addTimeScale(1);
+			uiCenter.setChangingText(space.getTimeScale() + "x");
+		}
 	}
 	public void updatePlanetClickIndex(){
 		planetActor.setPlanetClicked(planetClickIndex);

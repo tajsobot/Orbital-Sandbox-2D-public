@@ -18,7 +18,7 @@ public class PhysicsSpace {
     }
 
     public void updateAll(float deltaTime){
-        for (int t = 0; t < timeScale; t++) {
+        for (int t = 0; t < Math.abs(timeScale); t++) {
             for (int i = 0; i < objectList.size(); i++) {
                 for (int j = 0; j < objectList.size(); j++) {
                     if(i != j){

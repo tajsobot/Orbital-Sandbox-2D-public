@@ -99,7 +99,7 @@ public class PhysicsObject {
             posY += velocity.y * deltaTime;
 
             if(doTraces){
-                timeElapsed += deltaTime;
+                timeElapsed += Math.abs(deltaTime);
                 if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
                     addPointToTracers(posX, posY);
                     timeElapsed = 0;

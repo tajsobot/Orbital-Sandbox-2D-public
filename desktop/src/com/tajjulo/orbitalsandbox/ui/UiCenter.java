@@ -138,11 +138,14 @@ public class UiCenter {
     public void doPlanetInfoLabels() {
         if(clickPlanetIndex >= 0 && space.getSize() > 0){
             PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
-            labels[0].setText("mass: " + po.getMass());
-            labels[1].setText("velocity x: " + po.getVelocity().x);
-            labels[2].setText("velocity y: " + po.getVelocity().y);
-            labels[3].setText("velocity x: " + po.getAcceleration().x);
-            labels[4].setText("velocity y: " + po.getAcceleration().y);
+            labels[0].setText("M = " + po.getMass() + " kg");
+            labels[1].setText("V = " + (int)po.getVelocity().len() + " m/s");
+            labels[2].setText("A = " + (int)po.getAcceleration().len() + " m/s2");
+            labels[3].setText("Fg = " + (int)po.getForceForDrawing().len() + " N");
+
+
+//            labels[2].setText("V,x = " + (int)po.getVelocity().x + " m/s");
+//            labels[3].setText("V,y = " + (int)po.getVelocity().y + " m/s");
         }else {
             labels[0].setText("");
             labels[1].setText("");
