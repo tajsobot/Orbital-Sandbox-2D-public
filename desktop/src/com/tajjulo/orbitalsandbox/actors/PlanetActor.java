@@ -31,11 +31,12 @@ public class PlanetActor extends Actor {
         camera = (OrthographicCamera) getStage().getCamera();
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        drawTraces();
-        drawPlanets();
-        drawPlanets();
-        drawShadedPlanets();
-        drawOutline();
+        if(space.getSize() != 0){
+            drawTraces();
+            drawPlanets();
+            drawShadedPlanets();
+            drawOutline();
+        }
     }
 
     public void drawTraces(){

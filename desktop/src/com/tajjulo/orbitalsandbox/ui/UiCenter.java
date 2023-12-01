@@ -73,14 +73,22 @@ public class UiCenter {
         buttonTable.bottom();
         buttonPressID = "";
 
-        button = createButton("pause/play", "buttonPause", 5);
-        button.pad(5);
+        button = createButton("< ", "timeDecrease", 5);
         buttonTable.add(button);
 
-        button = createButton("toggle vectors", "buttonVectors", 5);
+        button = createButton(">", "timeIncrease", 5);
         buttonTable.add(button);
 
-        button = createButton("Add Random planet", "planetAdder", 5);
+        button = createButton("Pause/Play", "buttonPause", 5);
+        buttonTable.add(button);
+
+        button = createButton("Toggle vectors", "buttonVectors", 5);
+        buttonTable.add(button);
+
+        button = createButton("Add random planet", "planetRandomAdder", 5);
+        buttonTable.add(button);
+
+        button = createButton("Add custom planet", "planetCustomAdder", 5);
         buttonTable.add(button);
 
         buttonTable.pad(5).bottom();
@@ -128,7 +136,7 @@ public class UiCenter {
         stage.getViewport().update(width, height, true);
     }
     public void doPlanetInfoLabels() {
-        if(clickPlanetIndex >= 0){
+        if(clickPlanetIndex >= 0 && space.getSize() > 0){
             PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
             labels[0].setText("mass: " + po.getMass());
             labels[1].setText("velocity x: " + po.getVelocity().x);
@@ -167,7 +175,7 @@ public class UiCenter {
             }
         };
 
-        Timer.schedule(changingTextTask, 0.5f);
+        Timer.schedule(changingTextTask, 1.0f);
     }
     public TextButton createButton(String text, String buttonName, int padding){
         button = new TextButton(text, textButtonStyle);
