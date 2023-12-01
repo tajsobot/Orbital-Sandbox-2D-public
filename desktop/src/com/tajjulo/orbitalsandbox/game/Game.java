@@ -40,7 +40,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	PlanetMap planetMap;
 	private int planetClickIndex;
 
-	private boolean isAddingPlanet;
+	private String clickState;
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
@@ -81,6 +81,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		multiplexer.addProcessor(uiStage);
 		multiplexer.addProcessor(this);
 		Gdx.input.setInputProcessor(multiplexer);
+
+		clickState = "select";
 	}
 	@Override
 	public void render () {
@@ -109,7 +111,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		spaceStage.draw();
 		uiStage.draw();
 		uiCenter.doPlanetInfoLabels();
-
 	}
 
 	@Override
@@ -210,6 +211,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 * 40, new Vector2(randomNum4, randomNum5), false, 10));
 		}
 		if(uiCenter.getButtonPressID().equals("planetCustomAdder")){
+			clickState = "adding";
 			if(space.getTimeScale() > 0){
 				toggleTime();
 			}
@@ -264,12 +266,17 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	}
 
 	@Override public boolean touchDown (int screenX, int screenY, int pointer, int button) {
+		Vector3 clickPos = new Vector3(screenX, screenY, 0);
+		camera.unproject(clickPos);
+
+		if(clickState.compareTo("adding") == 0){
+			space.addObject(new PhysicsObject((long)clickPos.x, (long)clickPos.y));
+			clickState = "select";
+		}
 		for (int i = 0; i < space.getSize(); i++) {
 			float planetRadius = space.getObjectAtIndex(i).getPlanetRadius();
 			float posX = space.getObjectAtIndex(i).getPosX();
 			float posY = space.getObjectAtIndex(i).getPosY();
-			Vector3 clickPos = new Vector3(screenX, screenY, 0);
-			camera.unproject(clickPos);
 
 			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
 				planetActor.setPlanetClicked(i);
