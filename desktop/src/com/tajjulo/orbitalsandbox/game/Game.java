@@ -63,7 +63,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
 		vectorActor = new VectorActor(space);
@@ -120,8 +119,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	public void resize(int width, int height) {
 		viewport.update(width, height);
-		camera.position.setZero();
-		uiCenter.updatecamera(width, height);
+		uiCenter.updateResize(width, height);
 	}
 
 	public void doPhysics(float fixedDeltaTime){
@@ -171,10 +169,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	private int timeScaleSaved = 1;
 	public void doInputsSimulation(){
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
-			increaseTime();
+			if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
+				increaseTime(10);
+			}else increaseTime(1);
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
-			decreaseTime();
+			if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+				increaseTime(-10);
+			}else increaseTime(-1);
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
 			toggleTime();
@@ -190,10 +192,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	public void doUiInputs(){
 		if(uiCenter.getButtonPressID().equals("timeIncrease")){
-			increaseTime();
+			increaseTime(1);
 		}
 		if(uiCenter.getButtonPressID().equals("timeDecrease")){
-			decreaseTime();
+			increaseTime(-1);
 		}
 		if(uiCenter.getButtonPressID().equals("buttonVectors")){
 			vectorActor.toggleVectors();
@@ -220,6 +222,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			uiCenter.setChangingText("Adding planet...");
 			//TODO
 
+
 		}
 		if(uiCenter.getButtonPressID().equals("button1")){
 			toggleTime();
@@ -238,19 +241,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			uiCenter.setChangingText("paused");
 		}
 	}
-	public void decreaseTime(){
-		if (space.getTimeScale() == 1)toggleTime();
-		else {
-			space.addTimeScale(-1);
-			uiCenter.setChangingText(space.getTimeScale() + "x");
-		}
-	}
-	public void increaseTime(){
-		if (space.getTimeScale() == -1) toggleTime();
-		else {
-			space.addTimeScale(1);
-			uiCenter.setChangingText(space.getTimeScale() + "x");
-		}
+	public void increaseTime(int a){
+		space.addTimeScale(a);
+		if(space.getTimeScale() == 0){
+			uiCenter.setChangingText("paused");
+		}else uiCenter.setChangingText(space.getTimeScale() + "x");
 	}
 	public void updatePlanetClickIndex(){
 		planetActor.setPlanetClicked(planetClickIndex);
@@ -269,7 +264,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Vector3 clickPos = new Vector3(screenX, screenY, 0);
 		camera.unproject(clickPos);
 
-		if(clickState.compareTo("adding") == 0){
+		if(clickState.equals("adding")){
 			space.addObject(new PhysicsObject((long)clickPos.x, (long)clickPos.y));
 			clickState = "select";
 		}

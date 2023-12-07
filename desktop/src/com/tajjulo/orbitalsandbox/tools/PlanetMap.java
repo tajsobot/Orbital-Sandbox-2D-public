@@ -16,23 +16,23 @@ public class PlanetMap {
     private String inputFileName;
     private String outputFileName;
 
-    private ArrayList<int[]> list;
+    private ArrayList<double[]> list;
     private PhysicsSpace physicsSpace;
 
     public PlanetMap(){
         inputFileName = "inputMap.txt";
         outputFileName = "outputMap.txt";
-        list = new ArrayList<int[]>();
+        list = new ArrayList<double[]>();
     }
 
     public PlanetMap(String inputFileName, String outputFileName) {
         this.inputFileName = inputFileName;
         this.outputFileName = outputFileName;
-        list = new ArrayList<int[]>();
+        list = new ArrayList<double[]>();
     }
 
-    private int[] lineToArray(String line){
-        int[] arr = new int[dataNames.length];
+    private double[] lineToArray(String line){
+        double[] arr = new double[dataNames.length];
         for (int i = 0; i < dataNames.length; i++) {
             int dataIndex = line.indexOf(dataNames[i]);
             int beginIndex = dataIndex + dataNames[i].length() + 2;
@@ -45,7 +45,7 @@ public class PlanetMap {
                 count++;
             }
             String value = line.substring(beginIndex, endIndex);
-            arr[i] = Integer.valueOf(value);
+            arr[i] = Double.parseDouble(value);
         }
         return arr;
     }
@@ -79,8 +79,8 @@ public class PlanetMap {
             list.add(lineToArray(line));
         }
         for (int i = 0; i < list.size(); i++) {
-            int[] arr = list.get(i);
-            physicsSpace.addObject(new PhysicsObject(arr[0], arr[1], arr[2], new Vector2(arr[3], arr[4]),arr[5] != 0, arr[6]));
+            double[] arr = list.get(i);
+            physicsSpace.addObject(new PhysicsObject((long)arr[0], (long)arr[1], (int)arr[2], new Vector2((float)arr[3], (float)arr[4]),arr[5] != 0, (float)arr[6]));
         }
         return physicsSpace;
     }

@@ -12,7 +12,7 @@ public class PhysicsObject {
     private float posX;
     private float posY;
 
-    private long mass;
+    private double mass;
     private Vector2 force;
 
     private Vector2 velocity;
@@ -91,8 +91,8 @@ public class PhysicsObject {
     public void updateKinematics(float deltaTime){
         if(!isStatic){
             forceForDrawing.set(force);
-            acceleration.x = force.x / mass;
-            acceleration.y = force.y / mass;
+            acceleration.x = force.x / (float)mass;
+            acceleration.y = force.y / (float)mass;
             velocity.x += acceleration.x * deltaTime;
             velocity.y += acceleration.y * deltaTime;
             posX += velocity.x * deltaTime;
@@ -116,7 +116,7 @@ public class PhysicsObject {
         dir.y = obj.getPosY() - posY;
         dir.nor();
 
-        float forceScale = ((mass * obj.getMass())/distPow2) * G;
+        float forceScale = (((float)mass * (float)obj.getMass())/distPow2) * G;
         Vector2 gravityForce = new Vector2(dir.x * forceScale, dir.y * forceScale);
         if (distPow2 > Math.pow(minimalSimulationRadius,2)){
             force.add(gravityForce);
@@ -173,7 +173,7 @@ public class PhysicsObject {
         this.velocity = velocity;
     }
 
-    public long getMass() {
+    public double getMass() {
         return mass;
     }
 
@@ -214,6 +214,6 @@ public class PhysicsObject {
     }
 
     public void updatePlanetRadius(){
-        planetRadius = (float) Math.cbrt(mass* 1.0f / (4f/3f) * density * Math.PI);
+        planetRadius = 5f/(float)Math.cbrt((density * Math.PI* 3f)/(mass * 4f));
     }
 }

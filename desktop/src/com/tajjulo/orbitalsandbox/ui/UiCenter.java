@@ -1,50 +1,46 @@
 package com.tajjulo.orbitalsandbox.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
+import sun.font.TextLabel;
 
 public class UiCenter {
-    Stage stage;
 
+    Stage stage;
     TextButton button;
     TextButton.TextButtonStyle textButtonStyle;
     BitmapFont font;
     Skin skin;
     TextureAtlas buttonAtlas;
-
     Table table;
     Table labelTable;
     Table buttonTable;
     Label changingLabel;
     ScrollPane scrollPane;
-
     PhysicsSpace space;
-    String textTimeScale;
-    Timer timer;
-
     Label[] labels;
-
     String buttonPressID;
-
     OrthographicCamera camera;
     Viewport viewport;
-
-    PhysicsObject physicsObject;
+    TextField textField;
     int clickPlanetIndex = -1;
-
     private Timer.Task changingTextTask;
 
     public UiCenter(PhysicsSpace space){
@@ -54,9 +50,9 @@ public class UiCenter {
         stage = new Stage(viewport);
 
         font = new BitmapFont();
-        skin = new Skin();
+//      skin = new Skin();
         buttonAtlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        skin.addRegions(buttonAtlas);
+//      skin.addRegions(buttonAtlas);
         textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
 
@@ -76,7 +72,7 @@ public class UiCenter {
         button = createButton("< ", "timeDecrease", 5);
         buttonTable.add(button);
 
-        button = createButton(">", "timeIncrease", 5);
+        button = createButton(" >", "timeIncrease", 5);
         buttonTable.add(button);
 
         button = createButton("Pause/Play", "buttonPause", 5);
@@ -99,42 +95,55 @@ public class UiCenter {
 
         labelTable = new Table();
 
-        // Create a scroll pane and add the table to it
         scrollPane = new ScrollPane(labelTable);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setScrollingDisabled(true, false); // Disable horizontal scrolling
 
-        // Add the scroll pane to the stage
+        // Set the position of the ScrollPane to the left center of the screen
+        clickPlanetIndex = -1;
+        labels = new Label[4];
+        labels[0] = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        labels[0].setName("mass");
+        labels[1] = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        labels[1].setName("speed");
+        labels[2] = new Label("" , new Label.LabelStyle(font, Color.WHITE));
+        labels[2].setName("acceleration");
+        labels[3] = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        labels[3].setName("force");
+
+        float scrollPaneHeight = (Gdx.graphics.getHeight() / 2f); // Set the height as needed
+        scrollPane.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeight);
         stage.addActor(scrollPane);
 
-        // Position the scroll pane on the middle-left side of the screen
-        scrollPane.setPosition(0, stage.getHeight() / 2f - scrollPane.getHeight() / 2f);
-
-        clickPlanetIndex = -1;
-
-        labels = new Label[5];
-        Label label;
-        labels[0] = new Label("mass: ", new Label.LabelStyle(font, Color.WHITE));
-        labels[1] = new Label("velocity X: ", new Label.LabelStyle(font, Color.WHITE));
-        labels[2] = new Label("velocity Y: " , new Label.LabelStyle(font, Color.WHITE));
-        labels[3] = new Label("acceleration X: ", new Label.LabelStyle(font, Color.WHITE));
-        labels[4] = new Label("acceleration Y: ", new Label.LabelStyle(font, Color.WHITE));
-        for (int i = 0; i < labels.length; i++) {
-            labelTable.add(labels[i]).expandX().fillX().row();
+        for (Label leftLabel : labels) {
+            labelTable.add(leftLabel).expandX().fillX().row();
             labelTable.pad(3);
+
+            leftLabel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Label Clicked", leftLabel.getName());
+
+                }
+            });
         }
+
+        //novo
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup.setFillParent(true);
+        verticalGroup.center();
+        textField = new TextField("", skin);
+        verticalGroup.addActor(textField);
+        stage.addActor(verticalGroup);
     }
 
-    public void render(float delta) {
-        // Update and render the stage
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+    private void printEnteredText() {
+        String enteredText = textField.getText();
+        System.out.println("Entered Text: " + enteredText);
     }
 
-    public void resize(int width, int height) {
-        // Update the stage's viewport when the screen is resized
-        stage.getViewport().update(width, height, true);
-    }
     public void doPlanetInfoLabels() {
         if(clickPlanetIndex >= 0 && space.getSize() > 0){
             PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
@@ -143,17 +152,14 @@ public class UiCenter {
             labels[2].setText("A = " + (int)po.getAcceleration().len() + " m/s2");
             labels[3].setText("Fg = " + (int)po.getForceForDrawing().len() + " N");
 
-
-//            labels[2].setText("V,x = " + (int)po.getVelocity().x + " m/s");
-//            labels[3].setText("V,y = " + (int)po.getVelocity().y + " m/s");
         }else {
             labels[0].setText("");
             labels[1].setText("");
             labels[2].setText("");
             labels[3].setText("");
-            labels[4].setText("");
         }
     }
+
     public String getButtonPressID() {
         return buttonPressID;
     }
@@ -166,20 +172,19 @@ public class UiCenter {
         changingLabel.setText(text);
         changingLabel.clearActions();
 
-        // Cancel any existing task
         if (changingTextTask != null) {
             changingTextTask.cancel();
         }
-        // Schedule a new task
         changingTextTask = new Timer.Task() {
             @Override
             public void run() {
-                changingLabel.setText(""); // Set the text back to an empty string
+                changingLabel.setText("");
             }
         };
-
+        //delay
         Timer.schedule(changingTextTask, 1.0f);
     }
+
     public TextButton createButton(String text, String buttonName, int padding){
         button = new TextButton(text, textButtonStyle);
         button.pad(padding);
@@ -194,16 +199,24 @@ public class UiCenter {
         return button;
     }
 
-    public void updatecamera(int width, int height){
-        viewport.update(width, height);
-    }
-
     public Stage getStage() {
         return stage;
+    }
+
+    public void updateResize(int width, int height){
+        viewport.update(width, height, true);
+        buttonTable.setPosition(width/2f, buttonTable.getY());
+        float scrollPaneHeight = (Gdx.graphics.getHeight() / 10f); // Set the height as needed
+        scrollPane.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, 200, scrollPaneHeight);
+        stage.setDebugAll(true);
+
     }
 
     public void setPlanetClicked(int index){
         clickPlanetIndex = index;
     }
 
+    public void toggleTextField(){
+
+    }
 }
