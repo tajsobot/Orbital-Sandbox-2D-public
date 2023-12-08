@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class PhysicsSpace {
     private int timeScale = 1;
+    private boolean doCollisions = true;
 
     private ArrayList<PhysicsObject> objectList;
 
@@ -22,7 +23,17 @@ public class PhysicsSpace {
             for (int i = 0; i < objectList.size(); i++) {
                 for (int j = 0; j < objectList.size(); j++) {
                     if(i != j){
-                        objectList.get(i).updateGravity(objectList.get(j), deltaTime);
+                        PhysicsObject obj1 = objectList.get(i);
+                        PhysicsObject obj2 = objectList.get(j);
+                        obj1.updateGravity(obj2, deltaTime);
+                        if(doCollisions){
+
+                            float distance = (float)Math.sqrt(Math.pow(obj1.getPosX() - obj2.getPosX(),2) + Math.pow(obj1.getPosY() - obj2.getPosY(),2));
+                            float minCollisionDistance = obj1.getPlanetRadius() + obj2.getPlanetRadius();
+                            if(distance < minCollisionDistance){
+                                System.out.println(i + " "+ j);
+                            }
+                        }
                     }
                 }
             }

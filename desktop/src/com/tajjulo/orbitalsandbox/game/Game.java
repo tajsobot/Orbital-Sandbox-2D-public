@@ -74,6 +74,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.input.setInputProcessor(multiplexer);
 
 		clickState = "select";
+		rawCameraPosition = new Vector3(0,0,0);
+
 	}
 	@Override
 	public void render () {
@@ -120,21 +122,22 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		space.updateAll(fixedDeltaTime);
 	}
 
+	Vector3 rawCameraPosition;
 	public void doInputsCamera(){
 		int cameraSpeed = 200;
 		int cameraZoomSpeed = 1;
 
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			camera.position.x += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
+			rawCameraPosition.x += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			camera.position.x += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
+			rawCameraPosition.x += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)){
-			camera.position.y += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
+			rawCameraPosition.y += cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.S)){
-			camera.position.y += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
+			rawCameraPosition.y += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
 			camera.position.setZero();
@@ -146,11 +149,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		if(Gdx.input.isKeyPressed(Input.Keys.E)){
 			camera.zoom += -cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
+		//camera smoothing
+		camera.position.lerp(rawCameraPosition, 0.2f);
+
 		// 1 - 10 number inputs
 		for (int i = 0; i < Math.min(space.getSize(), 10) ; i++) {
 			if(Gdx.input.isKeyPressed(8 + i)) { // num1 je int 8
 				PhysicsObject targetObject = space.getObjectAtIndex(i);
-				camera.position.set(targetObject.getPosX(), targetObject.getPosY(), 0);
+				rawCameraPosition.set(targetObject.getPosX(), targetObject.getPosY(), 0);
 				planetActor.setPlanetClicked(i);
 				uiCenter.setPlanetClicked(i);
 				planetClickIndex = i;
