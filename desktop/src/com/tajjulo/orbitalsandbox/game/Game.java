@@ -90,7 +90,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			doInputsCamera();
 			doInputsSimulation();
 		}
-
 		doUiInputs();
 
 		//draw
@@ -184,7 +183,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER)){
 			toggleTime();
 		}
-		if( Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL)){
+		if( Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL) ||  Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) ){
 			if(planetClickIndex >= 0 && space.getSize() > 0){
 				space.removeObject(planetClickIndex);
 				planetClickIndex--;
@@ -216,6 +215,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			int randomNum5 = random.nextInt(3000) - 1500;
 			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 * 40, new Vector2(randomNum4, randomNum5), false, 10));
 		}
+		if(uiCenter.getButtonPressID().equals("removeAll")){
+			space.removeAllObjects();
+		}
+
 
 		if(uiCenter.getButtonPressID().equals("planetCustomAdder")){
 			clickState = "adding";
@@ -231,8 +234,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			toggleTime();
 		}
 		uiCenter.setButtonPressID("");
-
-
 	}
 
 	public void toggleTime(){
@@ -319,6 +320,4 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	@Override public boolean keyTyped (char character) {
 		return false;
 	}
-
-
 }

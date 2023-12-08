@@ -61,8 +61,11 @@ public class PhysicsSpace {
         timeScale += addValue;
     }
     public void removeObject(int index){
-
         objectList.remove(index);
-
+    }
+    public void removeAllObjects(){
+        for(int i = objectList.size() -1 ; i >= 0; i--) {
+            objectList.remove(i);
+        }
     }
 }

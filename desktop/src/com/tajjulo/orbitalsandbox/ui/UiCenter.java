@@ -47,6 +47,7 @@ public class UiCenter {
     private Timer.Task changingTextTask;
     VerticalGroup verticalGroup;
     String labelName;
+    int savedTimescale;
 
     public UiCenter(PhysicsSpace space){
         this.space = space;
@@ -86,10 +87,13 @@ public class UiCenter {
         button = createButton("Toggle vectors", "buttonVectors", 5);
         buttonTable.add(button);
 
-        button = createButton("Add random planet", "planetRandomAdder", 5);
-        buttonTable.add(button);
+//        button = createButton("Add random planet", "planetRandomAdder", 5);
+//        buttonTable.add(button);
 
         button = createButton("Add custom planet", "planetCustomAdder", 5);
+        buttonTable.add(button);
+
+        button = createButton("Remove all", "removeAll", 5);
         buttonTable.add(button);
 
         buttonTable.pad(5).bottom();
@@ -131,6 +135,7 @@ public class UiCenter {
                 public void clicked(InputEvent event, float x, float y) {
                     Gdx.app.log("Label Clicked", leftLabel.getName());
                     labelName = leftLabel.getName();
+                    savedTimescale = space.getTimeScale();
                     space.setTimeScale(0);
                     isInputingNumbers = true;
                     verticalGroup.setVisible(true);
@@ -181,6 +186,7 @@ public class UiCenter {
             }catch (Exception e){
                 System.out.println("napacen vnos");
             }
+            space.setTimeScale(savedTimescale);
         }
     }
 
