@@ -15,7 +15,6 @@ public class PlanetMap {
 
     private String inputFileName;
     private String outputFileName;
-
     private ArrayList<double[]> list;
     private PhysicsSpace physicsSpace;
 

@@ -1,12 +1,14 @@
 package com.tajjulo.orbitalsandbox.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -41,7 +43,10 @@ public class UiCenter {
     Viewport viewport;
     TextField textField;
     int clickPlanetIndex = -1;
+    boolean isInputingNumbers = false;
     private Timer.Task changingTextTask;
+    VerticalGroup verticalGroup;
+    String labelName;
 
     public UiCenter(PhysicsSpace space){
         this.space = space;
@@ -101,15 +106,17 @@ public class UiCenter {
 
         // Set the position of the ScrollPane to the left center of the screen
         clickPlanetIndex = -1;
-        labels = new Label[4];
+        labels = new Label[5];
         labels[0] = new Label("", new Label.LabelStyle(font, Color.WHITE));
         labels[0].setName("mass");
         labels[1] = new Label("", new Label.LabelStyle(font, Color.WHITE));
         labels[1].setName("speed");
         labels[2] = new Label("" , new Label.LabelStyle(font, Color.WHITE));
-        labels[2].setName("acceleration");
+        labels[2].setName("speedX");
         labels[3] = new Label("", new Label.LabelStyle(font, Color.WHITE));
-        labels[3].setName("force");
+        labels[3].setName("speedY");
+        labels[4] = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        labels[4].setName("force");
 
         float scrollPaneHeight = (Gdx.graphics.getHeight() / 2f); // Set the height as needed
         scrollPane.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeight);
@@ -123,7 +130,11 @@ public class UiCenter {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Gdx.app.log("Label Clicked", leftLabel.getName());
-
+                    labelName = leftLabel.getName();
+                    space.setTimeScale(0);
+                    isInputingNumbers = true;
+                    verticalGroup.setVisible(true);
+                    textField.setText("");
                 }
             });
         }
@@ -131,32 +142,70 @@ public class UiCenter {
         //novo
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup = new VerticalGroup();
         verticalGroup.setFillParent(true);
+        verticalGroup. setVisible(false);
         verticalGroup.center();
         textField = new TextField("", skin);
         verticalGroup.addActor(textField);
         stage.addActor(verticalGroup);
     }
+    public void updateInputs(){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && isInputingNumbers){
+            int in = 0;
+            isInputingNumbers = false;
+            verticalGroup.setVisible(false);
+            try {
+                in = Integer.parseInt(getEnteredText());
+                if(labelName.compareTo("mass")==0){
+                    space.getObjectAtIndex(clickPlanetIndex).setMass(in);
+                }
+                if(labelName.compareTo("speed")==0){
+                    Vector2 vect = space.getObjectAtIndex(clickPlanetIndex).getVelocity();
+                    vect.nor();
+                    vect.x = vect.x * in;
+                    vect.y = vect.y * in;
+                    space.getObjectAtIndex(clickPlanetIndex).setVelocity(vect);
+                }
+                if(labelName.compareTo("speedX")==0){
+                    Vector2 vect = space.getObjectAtIndex(clickPlanetIndex).getVelocity();
+                    vect.x = in;
+                    space.getObjectAtIndex(clickPlanetIndex).setVelocity(vect);
+                }
+                if(labelName.compareTo("speedY")==0){
+                    Vector2 vect = space.getObjectAtIndex(clickPlanetIndex).getVelocity();
+                    vect.y = in;
+                    space.getObjectAtIndex(clickPlanetIndex).setVelocity(vect);
+                }
+                space.getObjectAtIndex(clickPlanetIndex).updatePlanetRadius();
+            }catch (Exception e){
+                System.out.println("napacen vnos");
+            }
+        }
+    }
 
-    private void printEnteredText() {
+    private String getEnteredText() {
         String enteredText = textField.getText();
         System.out.println("Entered Text: " + enteredText);
+        return enteredText;
     }
+
 
     public void doPlanetInfoLabels() {
         if(clickPlanetIndex >= 0 && space.getSize() > 0){
             PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
             labels[0].setText("M = " + po.getMass() + " kg");
             labels[1].setText("V = " + (int)po.getVelocity().len() + " m/s");
-            labels[2].setText("A = " + (int)po.getAcceleration().len() + " m/s2");
-            labels[3].setText("Fg = " + (int)po.getForceForDrawing().len() + " N");
+            labels[2].setText("Vx = " + (int)po.getVelocity().x + " m/s");
+            labels[3].setText("Vy = " + (int)po.getVelocity().y + " m/s");
+            labels[4].setText("F = " + (int)po.getForceForDrawing().len() + " N");
 
         }else {
             labels[0].setText("");
             labels[1].setText("");
             labels[2].setText("");
             labels[3].setText("");
+            labels[4].setText("");
         }
     }
 
@@ -206,17 +255,15 @@ public class UiCenter {
     public void updateResize(int width, int height){
         viewport.update(width, height, true);
         buttonTable.setPosition(width/2f, buttonTable.getY());
-        float scrollPaneHeight = (Gdx.graphics.getHeight() / 10f); // Set the height as needed
+        float scrollPaneHeight = (Gdx.graphics.getHeight() / 7f); // Set the height as needed
         scrollPane.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, 200, scrollPaneHeight);
-        stage.setDebugAll(true);
-
     }
 
     public void setPlanetClicked(int index){
         clickPlanetIndex = index;
     }
 
-    public void toggleTextField(){
-
+    public boolean isInputingNumbers() {
+        return isInputingNumbers;
     }
 }
