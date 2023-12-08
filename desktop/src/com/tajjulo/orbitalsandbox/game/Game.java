@@ -18,28 +18,20 @@ import com.tajjulo.orbitalsandbox.ui.UiCenter;
 import java.util.Random;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
-
 	private ExtendViewport viewport;
 	private OrthographicCamera camera;
 	private ShapeRenderer shape;
-
 	private float deltaTime;
 	private float accumulator = 0f;
-
 	private PhysicsSpace space;
-
 	private Stage spaceStage;
-
 	private GridActor gridActor;
 	private PlanetActor planetActor;
 	private VectorActor vectorActor;
-
 	private UiCenter uiCenter;
 	private Stage uiStage;
-
 	PlanetMap planetMap;
 	private int planetClickIndex;
-
 	private String clickState;
 	@Override
 	public void create () {
@@ -131,6 +123,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public void doInputsCamera(){
 		int cameraSpeed = 200;
 		int cameraZoomSpeed = 1;
+
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
 			camera.position.x += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}

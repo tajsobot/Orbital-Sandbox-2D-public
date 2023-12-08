@@ -15,7 +15,6 @@ public class VectorActor extends Actor {
     private PhysicsSpace space;
     private boolean drawVelocity;
     private boolean drawAcceleration;
-
     private float width;
     private float vectorGirth = 20;
     private boolean vectorToggle;

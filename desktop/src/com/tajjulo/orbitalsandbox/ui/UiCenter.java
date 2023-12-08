@@ -87,9 +87,6 @@ public class UiCenter {
         button = createButton("Toggle vectors", "buttonVectors", 5);
         buttonTable.add(button);
 
-//        button = createButton("Add random planet", "planetRandomAdder", 5);
-//        buttonTable.add(button);
-
         button = createButton("Add custom planet", "planetCustomAdder", 5);
         buttonTable.add(button);
 
