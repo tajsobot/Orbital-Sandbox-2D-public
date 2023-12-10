@@ -1,0 +1,41 @@
+{
+	"com.badlogic.gdx.graphics.Color": {
+		"white": [1, 1, 1, 1],
+		"black": [0, 0, 0, 1],
+		"red": [1, 0, 0, 1],
+		"green": [0, 1, 0, 1],
+		"blue": [0, 0, 1, 1],
+		"light_gray": [0.75, 0.75, 0.75, 1],
+		"gray": [0.5, 0.5, 0.5, 1],
+		"dark_gray": [0.25, 0.25, 0.25, 1],
+		"cyan": [0, 1, 1, 1],
+		"magenta": [1, 0, 1, 1],
+		"yellow": [1, 1, 0, 1],
+		"clear": [0, 0, 0, 0]
+	},
+	"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+		"default-font": {
+			"file": "default.fnt"
+		}
+	},
+	"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+		"default": {
+			"up": "default-round",
+			"down": "default-round-down",
+			"font": "default-font"
+		}
+	},
+	"com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+		"default": {
+			"font": "default-font",
+			"fontColor": "white",
+			"background": "textfield"
+		}
+	},
+	"com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+		"default": {
+			"titleFont": "default-font",
+			"background": "default-window"
+		}
+	}
+}

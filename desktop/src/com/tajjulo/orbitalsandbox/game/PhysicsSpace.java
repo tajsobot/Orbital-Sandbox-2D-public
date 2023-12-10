@@ -26,12 +26,28 @@ public class PhysicsSpace {
                         PhysicsObject obj1 = objectList.get(i);
                         PhysicsObject obj2 = objectList.get(j);
                         obj1.updateGravity(obj2, deltaTime);
+                        //todo collisions
                         if(doCollisions){
-
                             float distance = (float)Math.sqrt(Math.pow(obj1.getPosX() - obj2.getPosX(),2) + Math.pow(obj1.getPosY() - obj2.getPosY(),2));
                             float minCollisionDistance = obj1.getPlanetRadius() + obj2.getPlanetRadius();
                             if(distance < minCollisionDistance){
-                                System.out.println(i + " "+ j);
+                                if(obj1.getMass() >= obj2.getMass()){
+                                    //keep momentum
+                                    obj1.addVelocity(obj2.getVelocity(), obj2.getMass()/obj1.getMass());
+                                    //mass
+                                    obj1.setMass(obj1.getMass() + obj2.getMass());
+                                    obj1.updatePlanetRadius();
+
+                                    objectList.remove(obj2);
+                                } else if(obj1.getMass() < obj2.getMass()){
+                                    //momentum
+                                    obj2.addVelocity(obj1.getVelocity(), obj1.getMass()/obj2.getMass());
+                                    //mass
+                                    obj2.setMass(obj1.getMass() + obj2.getMass());
+                                    obj2.updatePlanetRadius();
+
+                                    objectList.remove(obj1);
+                                }
                             }
                         }
                     }
@@ -45,6 +61,9 @@ public class PhysicsSpace {
         }
     }
 
+    private void doCollisions(){
+
+    }
     public PhysicsObject getObjectAtIndex(int i) {
         if(i < objectList.size()){
             return objectList.get(i);

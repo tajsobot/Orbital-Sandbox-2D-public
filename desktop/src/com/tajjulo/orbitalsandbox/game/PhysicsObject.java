@@ -12,7 +12,7 @@ public class PhysicsObject {
     private float posX;
     private float posY;
 
-    private double mass;
+    private float mass;
     private Vector2 force;
 
     private Vector2 velocity;
@@ -157,7 +157,7 @@ public class PhysicsObject {
         this.force = force;
     }
 
-    public void setMass(long mass) {
+    public void setMass(float mass) {
         this.mass = mass;
     }
 
@@ -173,7 +173,7 @@ public class PhysicsObject {
         this.velocity = velocity;
     }
 
-    public double getMass() {
+    public float getMass() {
         return mass;
     }
 
@@ -215,5 +215,8 @@ public class PhysicsObject {
 
     public void updatePlanetRadius(){
         planetRadius = 5f/(float)Math.cbrt((density * Math.PI* 3f)/(mass * 4f));
+    }
+    public void addVelocity(Vector2 v, float scalar){
+        velocity.mulAdd(v , scalar);
     }
 }

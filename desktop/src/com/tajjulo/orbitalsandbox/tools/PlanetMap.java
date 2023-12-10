@@ -7,31 +7,29 @@ import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 import java.io.*;
 import java.util.ArrayList;
 
-//  format:
-//  {posX="0",posY="0",mass="1000",speedX="1000",speedY="1000",isStatic="0",density="10"}
 public class PlanetMap {
 
     private final String[] dataNames = {"posX","posY","mass","speedX","speedY","isStatic","density"};
 
     private String inputFileName;
     private String outputFileName;
-    private ArrayList<double[]> list;
+    private ArrayList<float[]> list;
     private PhysicsSpace physicsSpace;
 
     public PlanetMap(){
         inputFileName = "inputMap.txt";
         outputFileName = "outputMap.txt";
-        list = new ArrayList<double[]>();
+        list = new ArrayList<float[]>();
     }
 
     public PlanetMap(String inputFileName, String outputFileName) {
         this.inputFileName = inputFileName;
         this.outputFileName = outputFileName;
-        list = new ArrayList<double[]>();
+        list = new ArrayList<float[]>();
     }
 
-    private double[] lineToArray(String line){
-        double[] arr = new double[dataNames.length];
+    private float[] lineToArray(String line){
+        float[] arr = new float[dataNames.length];
         for (int i = 0; i < dataNames.length; i++) {
             int dataIndex = line.indexOf(dataNames[i]);
             int beginIndex = dataIndex + dataNames[i].length() + 2;
@@ -44,7 +42,7 @@ public class PlanetMap {
                 count++;
             }
             String value = line.substring(beginIndex, endIndex);
-            arr[i] = Double.parseDouble(value);
+            arr[i] = Float.parseFloat(value);
         }
         return arr;
     }
@@ -58,13 +56,13 @@ public class PlanetMap {
             int isStatic = 0;
             if(po.getIsStatic()) isStatic = 1;
             printWriter.println(
-                    "{posX=\"" + (int)po.getPosX() +
-                    "\",posY=\""+ (int)po.getPosY() +
-                    "\",mass=\"" + (int)po.getMass() +
-                    "\",speedX=\"" + (int)po.getVelocity().x +
-                    "\",speedY=\"" + (int)po.getVelocity().y +
-                    "\",isStatic=\"" + (int)isStatic +
-                    "\",density=\"" + (int)po.getDensity() + "\"}");
+                    "{posX=\"" + po.getPosX() +
+                    "\",posY=\""+ po.getPosY() +
+                    "\",mass=\"" + po.getMass() +
+                    "\",speedX=\"" + po.getVelocity().x +
+                    "\",speedY=\"" + po.getVelocity().y +
+                    "\",isStatic=\"" + isStatic +
+                    "\",density=\"" + po.getDensity() + "\"}");
         }
         printWriter.close();
     }
@@ -78,7 +76,7 @@ public class PlanetMap {
             list.add(lineToArray(line));
         }
         for (int i = 0; i < list.size(); i++) {
-            double[] arr = list.get(i);
+            float[] arr = list.get(i);
             physicsSpace.addObject(new PhysicsObject((long)arr[0], (long)arr[1], (int)arr[2], new Vector2((float)arr[3], (float)arr[4]),arr[5] != 0, (float)arr[6]));
         }
         return physicsSpace;
@@ -102,11 +100,32 @@ public class PlanetMap {
         this.outputFileName = outputFileName;
     }
 
+    public void setList(ArrayList<float[]> list) {
+        this.list = list;
+    }
+
+    public void setPhysicsSpace(PhysicsSpace physicsSpace) {
+        this.physicsSpace = physicsSpace;
+    }
+
     public String getInputFileName() {
         return inputFileName;
     }
 
     public String getOutputFileName() {
         return outputFileName;
+
+    }
+
+    public ArrayList<float[]> getList() {
+        return list;
+    }
+
+    public PhysicsSpace getPhysicsSpace() {
+        return physicsSpace;
+    }
+
+    public String[] getDataNames() {
+        return dataNames;
     }
 }

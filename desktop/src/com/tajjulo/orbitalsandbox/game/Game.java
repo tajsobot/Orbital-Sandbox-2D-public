@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
@@ -48,12 +49,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		try {
 			space = planetMap.convertTextToMap();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+
 		}
 		try {
 			planetMap.convertMapToText(space);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+
 		}
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
@@ -212,7 +213,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			int randomNum3 = random.nextInt(10000);
 			int randomNum4 = random.nextInt(3000) - 1500;
 			int randomNum5 = random.nextInt(3000) - 1500;
-			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 * 40, new Vector2(randomNum4, randomNum5), false, 10));
+			space.addObject(new PhysicsObject(randomNum1,randomNum2,randomNum3 * 40, new Vector2(randomNum4, randomNum5), false, 0.1f));
 		}
 		if(uiCenter.getButtonPressID().equals("removeAll")){
 			space.removeAllObjects();
@@ -270,7 +271,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		camera.unproject(clickPos);
 
 		if(clickState.equals("adding")){
-			space.addObject(new PhysicsObject((long)clickPos.x, (long)clickPos.y));
+			PhysicsObject p = new PhysicsObject((long)clickPos.x, (long)clickPos.y, 1, new Vector2(0,0), false, 0.1f);
+			space.addObject(p);
 			clickState = "select";
 		}
 		for (int i = 0; i < space.getSize(); i++) {

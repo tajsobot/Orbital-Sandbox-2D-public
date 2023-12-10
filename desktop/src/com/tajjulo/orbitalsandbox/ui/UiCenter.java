@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
-import sun.font.TextLabel;
 
 public class UiCenter {
 
@@ -91,6 +90,8 @@ public class UiCenter {
         buttonTable.add(button);
 
         button = createButton("Remove all", "removeAll", 5);
+        buttonTable.add(button);
+        button = createButton("random", "planetRandomAdder", 5);
         buttonTable.add(button);
 
         buttonTable.pad(5).bottom();
