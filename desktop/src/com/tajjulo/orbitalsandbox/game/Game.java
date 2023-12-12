@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
@@ -141,8 +140,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			rawCameraPosition.y += -cameraSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-			camera.position.setZero();
-			camera.zoom = 10;
+			rawCameraPosition.setZero();
+			camera.zoom = 100;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.Q)){
 			camera.zoom += cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
@@ -151,7 +150,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			camera.zoom += -cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		//camera smoothing
-		camera.position.lerp(rawCameraPosition, 0.2f);
+		camera.position.lerp(rawCameraPosition, 0.1f);
 
 		// 1 - 10 number inputs
 		for (int i = 0; i < Math.min(space.getSize(), 10) ; i++) {

@@ -39,6 +39,11 @@ public class PhysicsSpace {
                                     obj1.updatePlanetRadius();
 
                                     objectList.remove(obj2);
+
+                                    float centerX = ((obj1.getMass()*obj1.getPosX()) + (obj2.getMass() * obj2.getPosX()))/ (obj1.getMass() + obj2.getMass());
+                                    float centerY = ((obj1.getMass()*obj1.getPosY()) + (obj2.getMass() * obj2.getPosY()))/ (obj1.getMass() + obj2.getMass());
+                                    obj1.setPosX(centerX);
+                                    obj1.setPosY(centerY);
                                 } else if(obj1.getMass() < obj2.getMass()){
                                     //momentum
                                     obj2.addVelocity(obj1.getVelocity(), obj1.getMass()/obj2.getMass());
@@ -47,6 +52,10 @@ public class PhysicsSpace {
                                     obj2.updatePlanetRadius();
 
                                     objectList.remove(obj1);
+                                    float centerX = ((obj1.getMass()*obj1.getPosX()) + (obj2.getMass() * obj2.getPosX()))/ (obj1.getMass() + obj2.getMass());
+                                    float centerY = ((obj1.getMass()*obj1.getPosY()) + (obj2.getMass() * obj2.getPosY()))/ (obj1.getMass() + obj2.getMass());
+                                    obj2.setPosX(centerX);
+                                    obj2.setPosY(centerY);
                                 }
                             }
                         }

@@ -140,6 +140,10 @@ public class UiCenter {
                     textField.setText("");
                 }
             });
+
+            Label versionLabel = new Label("(Debug) Beta Version 0.1", new Label.LabelStyle(font, Color.WHITE));
+            versionLabel.setPosition(10, 10);
+            stage.addActor(versionLabel);
         }
 
         //novo

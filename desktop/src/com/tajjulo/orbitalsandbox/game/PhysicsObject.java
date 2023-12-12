@@ -161,11 +161,11 @@ public class PhysicsObject {
         this.mass = mass;
     }
 
-    public void setPosX(long posX) {
+    public void setPosX(float posX) {
         this.posX = posX;
     }
 
-    public void setPosY(long posY) {
+    public void setPosY(float posY) {
         this.posY = posY;
     }
 
