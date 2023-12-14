@@ -60,7 +60,7 @@ public class PhysicsObject {
         updatePlanetRadius();
     }
 
-    public PhysicsObject(long x, long y, int mass, Vector2 velocity, boolean isStatic, float densety){
+    public PhysicsObject(float x, float y, int mass, Vector2 velocity, boolean isStatic, float densety){
         posX = x;
         posY = y;
         this.mass = mass;

@@ -15,7 +15,7 @@
 	},
 	"com.badlogic.gdx.graphics.g2d.BitmapFont": {
 		"default-font": {
-			"file": "default.fnt"
+			"file": "arial-32.fnt"
 		}
 	},
 	"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {

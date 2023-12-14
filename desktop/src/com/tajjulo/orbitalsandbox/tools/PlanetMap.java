@@ -67,7 +67,6 @@ public class PlanetMap {
         printWriter.close();
     }
 
-    //vrne physiscs space za simulacijo
     public PhysicsSpace convertTextToMap() throws Exception {
         physicsSpace = new PhysicsSpace();
         BufferedReader reader = new BufferedReader(new FileReader(inputFileName));
@@ -77,7 +76,7 @@ public class PlanetMap {
         }
         for (int i = 0; i < list.size(); i++) {
             float[] arr = list.get(i);
-            physicsSpace.addObject(new PhysicsObject((long)arr[0], (long)arr[1], (int)arr[2], new Vector2((float)arr[3], (float)arr[4]),arr[5] != 0, (float)arr[6]));
+            physicsSpace.addObject(new PhysicsObject(arr[0], arr[1], (int)arr[2], new Vector2(arr[3], arr[4]),arr[5] != 0, (float)arr[6]));
         }
         return physicsSpace;
     }
