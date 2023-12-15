@@ -17,6 +17,7 @@ import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
 import java.util.Random;
 
+//test
 public class Game extends ApplicationAdapter implements InputProcessor {
 	private ExtendViewport viewport;
 	private OrthographicCamera camera;
