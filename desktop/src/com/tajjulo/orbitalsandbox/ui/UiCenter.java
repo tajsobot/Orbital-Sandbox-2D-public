@@ -2,8 +2,6 @@ package com.tajjulo.orbitalsandbox.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,9 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -21,6 +17,8 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
+
+import java.util.ArrayList;
 
 public class UiCenter {
 
@@ -34,9 +32,10 @@ public class UiCenter {
     Table labelTable;
     Table buttonTable;
     Label changingLabel;
-    ScrollPane scrollPane;
+    ScrollPane scrollPaneLeft;
     PhysicsSpace space;
     Label[] labels;
+    ArrayList<Label> labelsRight;
     String buttonPressID;
     OrthographicCamera camera;
     Viewport viewport;
@@ -47,6 +46,8 @@ public class UiCenter {
     VerticalGroup verticalGroup;
     String labelName;
     int savedTimescale;
+    ScrollPane scrollPaneRight;
+    Table labelTableRight;
 
     public UiCenter(PhysicsSpace space){
         this.space = space;
@@ -68,6 +69,8 @@ public class UiCenter {
         changingLabel = new Label("", new Label.LabelStyle(font, Color.WHITE));
         table.add(changingLabel).center();
         stage.addActor(table);
+
+        clickPlanetIndex = -1;
 
         // TextButton
         buttonTable = new Table();
@@ -102,9 +105,9 @@ public class UiCenter {
 
         labelTable = new Table();
 
-        scrollPane = new ScrollPane(labelTable);
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false); // Disable horizontal scrolling
+        scrollPaneLeft = new ScrollPane(labelTable);
+        scrollPaneLeft.setFadeScrollBars(false);
+        scrollPaneLeft.setScrollingDisabled(true, false); // Disable horizontal scrolling
 
         // Set the position of the ScrollPane to the left center of the screen
         clickPlanetIndex = -1;
@@ -121,8 +124,8 @@ public class UiCenter {
         labels[4].setName("force");
 
         float scrollPaneHeight = (Gdx.graphics.getHeight() / 2f); // Set the height as needed
-        scrollPane.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeight);
-        stage.addActor(scrollPane);
+        scrollPaneLeft.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeight);
+        stage.addActor(scrollPaneLeft);
 
         for (Label leftLabel : labels) {
             labelTable.add(leftLabel).expandX().fillX().row();
@@ -140,11 +143,18 @@ public class UiCenter {
                     textField.setText("");
                 }
             });
-
-            Label versionLabel = new Label("(Debug) Beta Version 0.1", new Label.LabelStyle(font, Color.WHITE));
-            versionLabel.setPosition(10, 10);
-            stage.addActor(versionLabel);
         }
+
+
+        //reused todo
+        labelsRight = new ArrayList<Label>();
+        labelTableRight = new Table();
+
+        scrollPaneRight = new ScrollPane(labelTableRight);
+        float scrollPaneHeight2 = (Gdx.graphics.getHeight() / 2f); // Set the height as needed
+        scrollPaneRight.setBounds(100, (Gdx.graphics.getHeight() - scrollPaneHeight2) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeight2);
+        stage.addActor(scrollPaneRight);
+
 
         //novo
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -156,6 +166,10 @@ public class UiCenter {
         textField = new TextField("", skin);
         verticalGroup.addActor(textField);
         stage.addActor(verticalGroup);
+
+        Label versionLabel = new Label("(Debug) Beta Version 0.1", new Label.LabelStyle(font, Color.WHITE));
+        versionLabel.setPosition(10, 10);
+        stage.addActor(versionLabel);
     }
     public void updateInputs(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && isInputingNumbers){
@@ -215,6 +229,19 @@ public class UiCenter {
             labels[3].setText("");
             labels[4].setText("");
         }
+
+        //desni del
+        for (int i = 0; i < space.getSize(); i++) {
+            Label localLabel = new Label("a: " + i , new Label.LabelStyle(font, Color.WHITE));
+            localLabel.setName(i + "");
+            localLabel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println("clicked right");
+                }
+            });
+            labelTableRight.add(localLabel);
+        }
     }
 
     public String getButtonPressID() {
@@ -264,7 +291,7 @@ public class UiCenter {
         viewport.update(width, height, true);
         buttonTable.setPosition(width/2f, buttonTable.getY());
         float scrollPaneHeight = (Gdx.graphics.getHeight() / 7f); // Set the height as needed
-        scrollPane.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, 200, scrollPaneHeight);
+        scrollPaneLeft.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, 200, scrollPaneHeight);
     }
 
     public void setPlanetClicked(int index){

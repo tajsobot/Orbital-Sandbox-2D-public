@@ -69,7 +69,6 @@ public class PhysicsSpace {
             }
         }
     }
-
     private void doCollisions(){
 
     }

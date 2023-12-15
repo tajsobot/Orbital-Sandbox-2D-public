@@ -150,7 +150,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			camera.zoom += -cameraZoomSpeed * Gdx.graphics.getDeltaTime() * camera.zoom;
 		}
 		//camera smoothing
-		camera.position.lerp(rawCameraPosition, 0.1f);
+		camera.position.lerp(rawCameraPosition, 0.06f);
 
 		// 1 - 10 number inputs
 		for (int i = 0; i < Math.min(space.getSize(), 10) ; i++) {
