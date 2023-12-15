@@ -44,17 +44,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		space = new PhysicsSpace();
 
 		//nastavi planete vun iz txt fila
-		planetMap = new PlanetMap();
-		try {
-			space = planetMap.convertTextToMap();
-		} catch (Exception e) {
+		planetMap = new PlanetMap("input.txt", "output.txt");
+		space = planetMap.convertTextToMap();
 
-		}
-		try {
-			planetMap.convertMapToText(space);
-		} catch (Exception e) {
+		planetMap.convertMapToText(space);
 
-		}
 		gridActor = new GridActor();
 		planetActor = new PlanetActor(space);
 		vectorActor = new VectorActor(space);

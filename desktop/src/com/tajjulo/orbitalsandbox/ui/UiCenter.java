@@ -240,7 +240,7 @@ public class UiCenter {
                     System.out.println("clicked right");
                 }
             });
-            labelTableRight.add(localLabel);
+//            labelTableRight.add(localLabel);
         }
     }
 
