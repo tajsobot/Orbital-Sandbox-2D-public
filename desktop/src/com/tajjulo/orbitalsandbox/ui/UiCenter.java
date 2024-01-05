@@ -149,27 +149,19 @@ public class UiCenter {
         //reused todo
         labelsRight = new ArrayList<Label>();
         labelTableRight = new Table();
-
+        labelTableRight.setFillParent(true);
         scrollPaneRight = new ScrollPane(labelTableRight);
         float scrollPaneHeight2 = (Gdx.graphics.getHeight() / 2f); // Set the height as needed
-        scrollPaneRight.setBounds(100, (Gdx.graphics.getHeight() - scrollPaneHeight2) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeight2);
+        scrollPaneRight.setScrollingDisabled(true, false); // Disable horizontal scrolling
+
         stage.addActor(scrollPaneRight);
-
-
-        //novo
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-        verticalGroup = new VerticalGroup();
-        verticalGroup.setFillParent(true);
-        verticalGroup. setVisible(false);
-        verticalGroup.center();
-        textField = new TextField("", skin);
-        verticalGroup.addActor(textField);
-        stage.addActor(verticalGroup);
+        stage.setDebugAll(true);
 
         Label versionLabel = new Label("(Debug) Beta Version 0.1", new Label.LabelStyle(font, Color.WHITE));
         versionLabel.setPosition(10, 10);
         stage.addActor(versionLabel);
+
+        updateResize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
     public void updateInputs(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && isInputingNumbers){
@@ -212,8 +204,8 @@ public class UiCenter {
         return enteredText;
     }
 
-
     public void doPlanetInfoLabels() {
+        //levi del
         if(clickPlanetIndex >= 0 && space.getSize() > 0){
             PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
             labels[0].setText("M = " + po.getMass() + " kg");
@@ -231,16 +223,20 @@ public class UiCenter {
         }
 
         //desni del
+        labelTableRight.clear();
         for (int i = 0; i < space.getSize(); i++) {
-            Label localLabel = new Label("a: " + i , new Label.LabelStyle(font, Color.WHITE));
+            Label localLabel = new Label("a: " + i, new Label.LabelStyle(font, Color.WHITE));
             localLabel.setName(i + "");
+
+            labelTableRight.add(localLabel).expandX().fillX().row();
+            labelTableRight.pad(3);
+
             localLabel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("clicked right");
+                    Gdx.app.log("Label Clicked", labelTableRight.getName());
                 }
             });
-//            labelTableRight.add(localLabel);
         }
     }
 
@@ -290,8 +286,11 @@ public class UiCenter {
     public void updateResize(int width, int height){
         viewport.update(width, height, true);
         buttonTable.setPosition(width/2f, buttonTable.getY());
-        float scrollPaneHeight = (Gdx.graphics.getHeight() / 7f); // Set the height as needed
-        scrollPaneLeft.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeight) / 2f, 200, scrollPaneHeight);
+        float scrollPaneHeightLeft = (Gdx.graphics.getHeight() / 7f); // Set the height as needed
+        scrollPaneLeft.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeightLeft) / 2f, 200, scrollPaneHeightLeft);
+        float scrollPaneHeightRight = 200;
+        System.out.println(scrollPaneHeightRight);
+        scrollPaneRight.setBounds(Gdx.graphics.getWidth() - scrollPaneRight.getWidth(), (Gdx.graphics.getHeight() - scrollPaneHeightRight) / 2f, scrollPaneRight.getWidth(), scrollPaneHeightRight);
     }
 
     public void setPlanetClicked(int index){
