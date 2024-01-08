@@ -101,6 +101,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		spaceStage.draw();
 		uiStage.draw();
 		uiCenter.doPlanetInfoLabels();
+
 	}
 
 	@Override
