@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.tajjulo.orbitalsandbox.OrbitalSandbox;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
@@ -18,7 +19,9 @@ import com.tajjulo.orbitalsandbox.ui.UiCenter;
 import java.util.Random;
 
 //test
-public class Game extends ApplicationAdapter implements InputProcessor {
+public class Game extends ScreenAdapter implements InputProcessor {
+
+	private OrbitalSandbox game;
 	private ExtendViewport viewport;
 	private OrthographicCamera camera;
 	private ShapeRenderer shape;
@@ -34,8 +37,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	PlanetMap planetMap;
 	private int planetClickIndex;
 	private String clickState;
-	@Override
-	public void create () {
+
+	public Game (OrbitalSandbox game) {
+		this.game = game;
+
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(500, 500, camera);
 		viewport.getCamera().position.set(0,0,0);
@@ -72,8 +77,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		rawCameraPosition = new Vector3(0,0,0);
 
 	}
-	@Override
-	public void render () {
+
+	public void render (float delta) {
 		//inputs
 		if(!uiCenter.isInputingNumbers()){
 			doInputsCamera();
