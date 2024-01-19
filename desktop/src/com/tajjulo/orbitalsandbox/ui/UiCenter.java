@@ -15,12 +15,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
+import com.sun.org.apache.xpath.internal.operations.Or;
+import com.tajjulo.orbitalsandbox.OrbitalSandbox;
 import com.tajjulo.orbitalsandbox.game.PhysicsObject;
 import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
+import com.tajjulo.orbitalsandbox.screens.GameScreen;
+import com.tajjulo.orbitalsandbox.screens.MainMenuScreen;
 
 import java.util.ArrayList;
 
 public class UiCenter {
+    OrbitalSandbox game;
     Stage stage;
     TextButton button;
     TextButton.TextButtonStyle textButtonStyle;
@@ -112,6 +117,8 @@ public class UiCenter {
         button = createButton("Remove all", "removeAll", 5);
         buttonTable.add(button);
         button = createButton("random", "planetRandomAdder", 5);
+        buttonTable.add(button);
+        button = createButton("Main Menu", "mainMenu", 5);
         buttonTable.add(button);
 
         buttonTable.pad(5).bottom();
@@ -236,7 +243,6 @@ public class UiCenter {
             labels[3].setText("");
             labels[4].setText("");
         }
-        stage.setDebugAll(true);
 
         //desni del
         labelTableRight.clear();

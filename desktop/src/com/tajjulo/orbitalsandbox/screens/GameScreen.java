@@ -1,4 +1,4 @@
-package com.tajjulo.orbitalsandbox.game;
+package com.tajjulo.orbitalsandbox.screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,13 +13,15 @@ import com.tajjulo.orbitalsandbox.OrbitalSandbox;
 import com.tajjulo.orbitalsandbox.actors.GridActor;
 import com.tajjulo.orbitalsandbox.actors.PlanetActor;
 import com.tajjulo.orbitalsandbox.actors.VectorActor;
+import com.tajjulo.orbitalsandbox.game.PhysicsObject;
+import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 import com.tajjulo.orbitalsandbox.tools.PlanetMap;
 import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
 import java.util.Random;
 
 //test
-public class Game extends ScreenAdapter implements InputProcessor {
+public class GameScreen extends ScreenAdapter implements InputProcessor {
 
 	private OrbitalSandbox game;
 	private ExtendViewport viewport;
@@ -38,7 +40,7 @@ public class Game extends ScreenAdapter implements InputProcessor {
 	private int planetClickIndex;
 	private String clickState;
 
-	public Game (OrbitalSandbox game) {
+	public GameScreen(OrbitalSandbox game) {
 		this.game = game;
 
 		camera = new OrthographicCamera();
@@ -217,6 +219,9 @@ public class Game extends ScreenAdapter implements InputProcessor {
 		}
 		if(uiCenter.getButtonPressID().equals("removeAll")){
 			space.removeAllObjects();
+		}
+		if(uiCenter.getButtonPressID().equals("mainMenu")){
+			game.setScreen(new MainMenuScreen(game));
 		}
 
 
