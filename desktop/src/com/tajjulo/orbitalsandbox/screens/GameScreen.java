@@ -89,7 +89,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		doUiInputs();
 
 		//draw
-		ScreenUtils.clear(0.4f,0.4f, 0.4f, 1 );
+		ScreenUtils.clear(0.066f, 0.121f, 0.180f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		//physics
@@ -172,12 +172,12 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
 	private int timeScaleSaved = 1;
 	public void doInputsSimulation(){
-		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)||Gdx.input.isKeyJustPressed(Input.Keys.I)){
 			if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
 				increaseTime(10);
 			}else increaseTime(1);
 		}
-		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT) ||Gdx.input.isKeyJustPressed(Input.Keys.U)){
 			if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
 				increaseTime(-10);
 			}else increaseTime(-1);

@@ -1,6 +1,8 @@
 package com.tajjulo.orbitalsandbox.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -51,10 +53,16 @@ public class VectorActor extends Actor {
 
     public void drawVelocityVectors(Color color){
         shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.begin(ShapeRenderer.ShapeType.Line);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shape.setColor(color);
+        float squareToTriangleRatio = 0.8f;
 
         for (int i = 0; i < space.getSize(); i++) {
+
+            float sqareLength = space.getObjectAtIndex(i).getVelocity().len() * squareToTriangleRatio;
+
             float posX = space.getObjectAtIndex(i).getPosX();
             float posY = space.getObjectAtIndex(i).getPosY();
             float vectorX = space.getObjectAtIndex(i).getVelocity().x;
@@ -65,8 +73,13 @@ public class VectorActor extends Actor {
             perpendicular2.rotateDeg(-90);
             perpendicular1.nor();
             perpendicular2.nor();
-            perpendicular1.mulAdd(perpendicular1, vectorGirth);
-            perpendicular2.mulAdd(perpendicular2,vectorGirth);
+            perpendicular1.mulAdd(perpendicular1, vectorGirth); //ob shaftu spodaj1
+            perpendicular2.mulAdd(perpendicular2,vectorGirth); // ob shaftu spodaj2
+
+            Vector2 awayPoint = new Vector2(space.getObjectAtIndex(i).getVelocity());
+
+            float[] vertices = {100, 100, 200, 100, 150, 200};
+            shape.polygon(vertices);
             shape.triangle(perpendicular1.x + posX, perpendicular1.y + posY,perpendicular2.x + posX, perpendicular2.y + posY, posX + vectorX, posY + vectorY);
         }
         shape.end();
@@ -74,7 +87,7 @@ public class VectorActor extends Actor {
 
     private void drawAccelerationVectors(Color color, float scale) {
         shape.setProjectionMatrix(getStage().getViewport().getCamera().combined);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(color);
 
         for (int i = 0; i < space.getSize(); i++) {
@@ -92,6 +105,7 @@ public class VectorActor extends Actor {
             perpendicular2.mulAdd(perpendicular2,vectorGirth);
             shape.triangle(perpendicular1.x + posX, perpendicular1.y + posY,perpendicular2.x + posX, perpendicular2.y + posY, posX + vectorX, posY + vectorY);
         }
+
         shape.end();
     }
 
