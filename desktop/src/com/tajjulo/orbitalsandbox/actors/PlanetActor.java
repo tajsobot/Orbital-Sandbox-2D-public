@@ -32,17 +32,17 @@ public class PlanetActor extends Actor {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         if(space.getSize() != 0){
+            drawTraces();
             drawPlanets();
             drawShadedPlanets();
             drawOutline();
-            drawTraces();
         }
     }
 
     public void drawTraces(){
         //izrise trace
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        shadeColor = new Color(Color.BLACK);
+        shadeColor = new Color(Color.WHITE);
         shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.4f);
         shape.setColor(shadeColor);
         float prevX = 0;

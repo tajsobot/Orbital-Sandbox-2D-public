@@ -46,7 +46,7 @@ public class GridActor extends Actor {
                 shape.rect(i * sqWidth - sqCount * sqWidth, j * sqHeight, sqWidth, sqHeight);
             }
         }
-        shadeColor = new Color(Color.BLUE);
+        shadeColor = new Color(Color.MAGENTA);
         shadeColor.set(shadeColor.r, shadeColor.g,shadeColor.b, 0.3f);
         shape.setColor(shadeColor);
         for (int i = 0; i < 100; i++) {

@@ -134,17 +134,19 @@ public class UiCenter {
         scrollPaneLeft.setScrollingDisabled(true, false); // Disable horizontal scrolling
 
         clickPlanetIndex = -1;
-        labels = new Label[5];
+        labels = new Label[6];
         labels[0] = new Label("", new Label.LabelStyle(font, Color.WHITE));
-        labels[0].setName("mass");
+        labels[0].setName("name");
         labels[1] = new Label("", new Label.LabelStyle(font, Color.WHITE));
-        labels[1].setName("speed");
-        labels[2] = new Label("" , new Label.LabelStyle(font, Color.WHITE));
-        labels[2].setName("speedX");
-        labels[3] = new Label("", new Label.LabelStyle(font, Color.WHITE));
-        labels[3].setName("speedY");
+        labels[1].setName("mass");
+        labels[2] = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        labels[2].setName("speed");
+        labels[3] = new Label("" , new Label.LabelStyle(font, Color.WHITE));
+        labels[3].setName("speedX");
         labels[4] = new Label("", new Label.LabelStyle(font, Color.WHITE));
-        labels[4].setName("force");
+        labels[4].setName("speedY");
+        labels[5] = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        labels[5].setName("force");
 
         float scrollPaneHeightLeft = (Gdx.graphics.getHeight() / 2f); // Set the height as needed
         scrollPaneLeft.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeightLeft) / 2f, Gdx.graphics.getWidth() / 2f, scrollPaneHeightLeft);
@@ -190,7 +192,11 @@ public class UiCenter {
             isInputingNumbers = false;
             verticalGroup.setVisible(false);
             try {
-                in = Integer.parseInt(getEnteredText());
+                if(labelName.compareTo("name")==0){
+                    space.getObjectAtIndex(clickPlanetIndex).setName(getEnteredText());
+                } else{
+                    in = Integer.parseInt(getEnteredText());
+                }
                 if(labelName.compareTo("mass")==0){
                     space.getObjectAtIndex(clickPlanetIndex).setMass(in);
                 }
@@ -230,11 +236,12 @@ public class UiCenter {
         //levi del
         if(clickPlanetIndex >= 0 && space.getSize() > 0){
             PhysicsObject po = space.getObjectAtIndex(clickPlanetIndex);
-            labels[0].setText("M = " + po.getMass() + " kg");
-            labels[1].setText("V = " + (int)po.getVelocity().len() + " m/s");
-            labels[2].setText("Vx = " + (int)po.getVelocity().x + " m/s");
-            labels[3].setText("Vy = " + (int)po.getVelocity().y + " m/s");
-            labels[4].setText("F = " + (int)po.getForceForDrawing().len() + " N");
+            labels[0].setText("name = " + po.getName());
+            labels[1].setText("M = " + po.getMass() + " kg");
+            labels[2].setText("V = " + (int)po.getVelocity().len() + " m/s");
+            labels[3].setText("Vx = " + (int)po.getVelocity().x + " m/s");
+            labels[4].setText("Vy = " + (int)po.getVelocity().y + " m/s");
+            labels[5].setText("F = " + (int)po.getForceForDrawing().len() + " N");
 
         }else {
             labels[0].setText("");
@@ -242,12 +249,14 @@ public class UiCenter {
             labels[2].setText("");
             labels[3].setText("");
             labels[4].setText("");
+            labels[5].setText("");
         }
 
         //desni del
         labelTableRight.clear();
+
         for (int i = 0; i < space.getSize(); i++) {
-            localLabelRight = new Label("a: " + i, new Label.LabelStyle(font, Color.WHITE));
+            localLabelRight = new Label(1+i + ": " + space.getObjectAtIndex(i).getName(), new Label.LabelStyle(font, Color.WHITE));
             localLabelRight.setName(i + "");
             labelTableRight.add(localLabelRight).expandX().fillX().row();
             labelTableRight.pad(3);

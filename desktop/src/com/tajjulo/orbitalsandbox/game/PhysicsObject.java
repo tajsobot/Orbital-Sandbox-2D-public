@@ -8,7 +8,7 @@ public class PhysicsObject {
 
     private final float G = 1000;
     private final float maxDeltaTime = 0.05f;
-
+    private String name;
     private float posX;
     private float posY;
 
@@ -44,6 +44,7 @@ public class PhysicsObject {
         this.isStatic = false;
         density = 1;
         updatePlanetRadius();
+        name = "physics object";
     }
 
     public PhysicsObject(long x, long y){
@@ -58,6 +59,7 @@ public class PhysicsObject {
         this.isStatic = false;
         density = 1;
         updatePlanetRadius();
+        name = "physics object";
     }
 
     public PhysicsObject(float x, float y, int mass, Vector2 velocity, boolean isStatic, float densety){
@@ -72,6 +74,7 @@ public class PhysicsObject {
         this.isStatic = isStatic;
         this.density = densety;
         updatePlanetRadius();
+        name = "physics object";
     }
 
     public PhysicsObject(long x, long y, int mass, Vector2 velocity){
@@ -86,6 +89,7 @@ public class PhysicsObject {
         this.isStatic = true;
         density = 1;
         updatePlanetRadius();
+        name = "physics object";
     }
 
     public void updateKinematics(float deltaTime){
@@ -218,5 +222,13 @@ public class PhysicsObject {
     }
     public void addVelocity(Vector2 v, float scalar){
         velocity.mulAdd(v , scalar);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
