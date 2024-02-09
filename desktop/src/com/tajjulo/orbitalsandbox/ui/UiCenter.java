@@ -319,7 +319,7 @@ public class UiCenter {
     public void updateResize(int width, int height){
         viewport.update(width, height, true);
         buttonTable.setPosition(width/2f, buttonTable.getY());
-        float scrollPaneHeightLeft = (Gdx.graphics.getHeight() / 7f); // Set the height as needed
+        float scrollPaneHeightLeft = (Gdx.graphics.getHeight() / 6f); // Set the height as needed
         scrollPaneLeft.setBounds(0, (Gdx.graphics.getHeight() - scrollPaneHeightLeft) / 2f, 200, scrollPaneHeightLeft);
         float scrollPaneHeightRight = space.getSize()*10;
         scrollPaneRight.setBounds(Gdx.graphics.getWidth() - 200, (Gdx.graphics.getHeight() - scrollPaneHeightRight) / 2f, 200, scrollPaneHeightRight);

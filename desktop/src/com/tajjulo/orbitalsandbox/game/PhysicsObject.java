@@ -31,6 +31,7 @@ public class PhysicsObject {
     private float density; // dL*M
     private float planetRadius;
     private final float minimumPlanetRadius = 10;
+    private boolean exertGravity;
 
     //constructors
     public PhysicsObject(){
@@ -75,9 +76,10 @@ public class PhysicsObject {
         this.density = densety;
         updatePlanetRadius();
         name = "physics object";
+        exertGravity = true;
     }
 
-    public PhysicsObject(long x, long y, int mass, Vector2 velocity){
+    public PhysicsObject(float x, float y, int mass, Vector2 velocity, boolean exertG){
         posX = x;
         posY = y;
         this.mass = mass;
@@ -86,10 +88,11 @@ public class PhysicsObject {
         this.velocity = velocity;
         acceleration = new Vector2(0,0);
         traces = new LinkedList<Vector2>();
-        this.isStatic = true;
+        this.isStatic = false;
         density = 1;
         updatePlanetRadius();
         name = "physics object";
+        exertGravity = exertG;
     }
 
     public void updateKinematics(float deltaTime){
@@ -113,7 +116,9 @@ public class PhysicsObject {
     }
 
     public void updateGravity(PhysicsObject obj, float deltaTime){
+        if(exertGravity){
 
+        }
         Vector2 dir = new Vector2(0,0);
         float distPow2 = (float) (Math.pow(obj.getPosX() - posX,2) + Math.pow(obj.getPosY() - posY,2));
         dir.x = obj.getPosX() - posX;
@@ -230,5 +235,9 @@ public class PhysicsObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean getExertGravity() {
+        return exertGravity;
     }
 }

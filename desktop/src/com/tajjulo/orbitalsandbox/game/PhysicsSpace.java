@@ -25,7 +25,9 @@ public class PhysicsSpace {
                     if(i != j){
                         PhysicsObject obj1 = objectList.get(i);
                         PhysicsObject obj2 = objectList.get(j);
-                        obj1.updateGravity(obj2, deltaTime);
+                        if(obj1.getExertGravity()){
+                            obj1.updateGravity(obj2, deltaTime);
+                        }
                         if(doCollisions){
                             float distance = (float)Math.sqrt(Math.pow(obj1.getPosX() - obj2.getPosX(),2) + Math.pow(obj1.getPosY() - obj2.getPosY(),2));
                             float minCollisionDistance = obj1.getPlanetRadius() + obj2.getPlanetRadius();

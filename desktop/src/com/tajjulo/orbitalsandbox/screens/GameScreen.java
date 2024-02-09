@@ -19,6 +19,7 @@ import com.tajjulo.orbitalsandbox.tools.PlanetMap;
 import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
 import java.util.Random;
+import java.util.concurrent.CancellationException;
 
 //test
 public class GameScreen extends ScreenAdapter implements InputProcessor {
@@ -39,6 +40,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 	PlanetMap planetMap;
 	private int planetClickIndex;
 	private String clickState;
+	int massSpawning = 0;
+	int flinging = 0; // 0 pomeni ni flinganja, 1 pomeni zacetek , 2 pomeni v postopku
 
 	public GameScreen(OrbitalSandbox game) {
 		this.game = game;
@@ -172,6 +175,31 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
 	private int timeScaleSaved = 1;
 	public void doInputsSimulation(){
+		//todo fling mechanic
+		if(Gdx.input.isKeyJustPressed(Input.Keys.O)){
+			if (massSpawning == 0) {
+				massSpawning = 1;
+				uiCenter.setChangingText("mass spawning enabled");
+
+			}
+			else if(massSpawning == 1){
+				massSpawning = 0;
+				uiCenter.setChangingText("mass spawning disabled");
+
+			}
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
+			if (massSpawning == 0) {
+				massSpawning = 1;
+				uiCenter.setChangingText("mass spawning enabled");
+
+			}
+			else if(massSpawning == 1){
+				massSpawning = 0;
+				uiCenter.setChangingText("mass spawning disabled");
+
+			}
+		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)||Gdx.input.isKeyJustPressed(Input.Keys.I)){
 			if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
 				increaseTime(10);
@@ -196,6 +224,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
 	public void doUiInputs(){
 		uiCenter.updateInputs();
+
 		if(uiCenter.getButtonPressID().equals("timeIncrease")){
 			increaseTime(1);
 		}
@@ -275,34 +304,48 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		Vector3 clickPos = new Vector3(screenX, screenY, 0);
 		camera.unproject(clickPos);
 
-		if(clickState.equals("adding")){
-			PhysicsObject p = new PhysicsObject((long)clickPos.x, (long)clickPos.y, 1, new Vector2(0,0), false, 0.1f);
-			space.addObject(p);
-			clickState = "select";
-		}
-		for (int i = 0; i < space.getSize(); i++) {
-			float planetRadius = space.getObjectAtIndex(i).getPlanetRadius();
-			float posX = space.getObjectAtIndex(i).getPosX();
-			float posY = space.getObjectAtIndex(i).getPosY();
-
-			if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
-				planetActor.setPlanetClicked(i);
-				planetClickIndex = i;
-				uiCenter.setPlanetClicked(i);
-				uiCenter.doPlanetInfoLabels();
-				break;
+		if(massSpawning == 0){
+			if(clickState.equals("adding")){
+				PhysicsObject p = new PhysicsObject((long)clickPos.x, (long)clickPos.y, 1, new Vector2(0,0), false, 0.1f);
+				space.addObject(p);
+				clickState = "select";
 			}
-			else{
-				planetActor.setPlanetClicked(-1);
-				uiCenter.setPlanetClicked(-1);
-				planetClickIndex = -1;
-			}
+			for (int i = 0; i < space.getSize(); i++) {
+				float planetRadius = space.getObjectAtIndex(i).getPlanetRadius();
+				float posX = space.getObjectAtIndex(i).getPosX();
+				float posY = space.getObjectAtIndex(i).getPosY();
 
+				if(Math.abs(clickPos.x - posX) < planetRadius && Math.abs(clickPos.y - posY) < planetRadius || Math.abs(clickPos.x - posX) < camera.zoom * 5 && Math.abs(clickPos.y - posY) < camera.zoom * 5){
+					planetActor.setPlanetClicked(i);
+					planetClickIndex = i;
+					uiCenter.setPlanetClicked(i);
+					uiCenter.doPlanetInfoLabels();
+					break;
+				}
+				else{
+					planetActor.setPlanetClicked(-1);
+					uiCenter.setPlanetClicked(-1);
+					planetClickIndex = -1;
+				}
+
+			}
+		} else if (massSpawning == 1){
+			space.addObject(new PhysicsObject(clickPos.x, clickPos.y, 1000, new Vector2(0,0), false));
 		}
+
 		return true;
 	}
 
 	@Override public boolean touchDragged (int screenX, int screenY, int pointer) {
+		System.out.println(screenX + "  " + screenY +"  "+ pointer);
+
+		Vector3 clickPos = new Vector3(screenX, screenY, 0);
+		camera.unproject(clickPos);
+
+		if(massSpawning == 1){
+			space.addObject(new PhysicsObject(clickPos.x, clickPos.y, 1, new Vector2(0,0), false));
+		}
+
 		return true;
 	}
 
