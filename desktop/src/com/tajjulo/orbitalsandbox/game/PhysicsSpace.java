@@ -23,44 +23,48 @@ public class PhysicsSpace {
             for (int i = 0; i < objectList.size(); i++) {
                 for (int j = 0; j < objectList.size(); j++) {
                     if(i != j){
-                        PhysicsObject obj1 = objectList.get(i);
-                        PhysicsObject obj2 = objectList.get(j);
-                        if(obj2.getExertGravity()) {
-                            obj1.updateGravity(obj2, deltaTime);
+                        try{
+                            PhysicsObject obj1 = objectList.get(i);
+                            PhysicsObject obj2 = objectList.get(j);
+                            if(obj2.getExertGravity()) {
+                                obj1.updateGravity(obj2, deltaTime);
+                                if (doCollisions && (obj1.isDoCollisions() && obj2.isDoCollisions())) {
+                                    float distance = (float) Math.sqrt(Math.pow(obj1.getPosX() - obj2.getPosX(), 2) + Math.pow(obj1.getPosY() - obj2.getPosY(), 2));
+                                    float minCollisionDistance = obj1.getPlanetRadius() + obj2.getPlanetRadius();
+                                    if (distance < minCollisionDistance) {
+                                        if (obj1.getMass() >= obj2.getMass()) {
+                                            //keep momentum
+                                            obj1.addVelocity(obj2.getVelocity(), obj2.getMass() / obj1.getMass());
+                                            //mass
+                                            obj1.setMass(obj1.getMass() + obj2.getMass());
+                                            obj1.updatePlanetRadius();
 
-                            if (doCollisions) {
-                                float distance = (float) Math.sqrt(Math.pow(obj1.getPosX() - obj2.getPosX(), 2) + Math.pow(obj1.getPosY() - obj2.getPosY(), 2));
-                                float minCollisionDistance = obj1.getPlanetRadius() + obj2.getPlanetRadius();
-                                if (distance < minCollisionDistance) {
-                                    if (obj1.getMass() >= obj2.getMass()) {
-                                        //keep momentum
-                                        obj1.addVelocity(obj2.getVelocity(), obj2.getMass() / obj1.getMass());
-                                        //mass
-                                        obj1.setMass(obj1.getMass() + obj2.getMass());
-                                        obj1.updatePlanetRadius();
+                                            objectList.remove(obj2);
 
-                                        objectList.remove(obj2);
+                                            float centerX = ((obj1.getMass() * obj1.getPosX()) + (obj2.getMass() * obj2.getPosX())) / (obj1.getMass() + obj2.getMass());
+                                            float centerY = ((obj1.getMass() * obj1.getPosY()) + (obj2.getMass() * obj2.getPosY())) / (obj1.getMass() + obj2.getMass());
+                                            obj1.setPosX(centerX);
+                                            obj1.setPosY(centerY);
+                                        } else if (obj1.getMass() < obj2.getMass()) {
+                                            //momentum
+                                            obj2.addVelocity(obj1.getVelocity(), obj1.getMass() / obj2.getMass());
+                                            //mass
+                                            obj2.setMass(obj1.getMass() + obj2.getMass());
+                                            obj2.updatePlanetRadius();
 
-                                        float centerX = ((obj1.getMass() * obj1.getPosX()) + (obj2.getMass() * obj2.getPosX())) / (obj1.getMass() + obj2.getMass());
-                                        float centerY = ((obj1.getMass() * obj1.getPosY()) + (obj2.getMass() * obj2.getPosY())) / (obj1.getMass() + obj2.getMass());
-                                        obj1.setPosX(centerX);
-                                        obj1.setPosY(centerY);
-                                    } else if (obj1.getMass() < obj2.getMass()) {
-                                        //momentum
-                                        obj2.addVelocity(obj1.getVelocity(), obj1.getMass() / obj2.getMass());
-                                        //mass
-                                        obj2.setMass(obj1.getMass() + obj2.getMass());
-                                        obj2.updatePlanetRadius();
-
-                                        objectList.remove(obj1);
-                                        float centerX = ((obj1.getMass() * obj1.getPosX()) + (obj2.getMass() * obj2.getPosX())) / (obj1.getMass() + obj2.getMass());
-                                        float centerY = ((obj1.getMass() * obj1.getPosY()) + (obj2.getMass() * obj2.getPosY())) / (obj1.getMass() + obj2.getMass());
-                                        obj2.setPosX(centerX);
-                                        obj2.setPosY(centerY);
+                                            objectList.remove(obj1);
+                                            float centerX = ((obj1.getMass() * obj1.getPosX()) + (obj2.getMass() * obj2.getPosX())) / (obj1.getMass() + obj2.getMass());
+                                            float centerY = ((obj1.getMass() * obj1.getPosY()) + (obj2.getMass() * obj2.getPosY())) / (obj1.getMass() + obj2.getMass());
+                                            obj2.setPosX(centerX);
+                                            obj2.setPosY(centerY);
+                                        }
                                     }
                                 }
                             }
+                        }catch (Exception e){
+                            System.out.println(e);
                         }
+
                     }
                 }
             }

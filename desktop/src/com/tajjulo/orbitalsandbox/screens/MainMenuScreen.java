@@ -66,11 +66,13 @@ public class MainMenuScreen extends ScreenAdapter {
             }
             else if (square2.contains(touchPos.x, touchPos.y)) {
                 // Action for square 2
+                //todo
                 System.out.println("Square 2 clicked!");
             }
             else if (square3.contains(touchPos.x, touchPos.y)) {
             // Action for square 3
             System.out.println("Square 3 clicked!");
+            Gdx.app.exit();
             }
         }
     }

@@ -21,7 +21,7 @@ public class PhysicsObject {
     private boolean isStatic;
     private float timeElapsed;
     private float minimalSimulationRadius = 20;
-    private int tracerFrequency = 30; //in Hz
+    private int tracerFrequency = 144; //in Hz
     private boolean doTraces = true;
     private int maxTracers = 500;
     private LinkedList<Vector2> traces;
@@ -32,6 +32,8 @@ public class PhysicsObject {
     private float planetRadius;
     private final float minimumPlanetRadius = 10;
     private boolean exertGravity;
+
+    private boolean doCollisions = true;
 
     //constructors
     public PhysicsObject(){
@@ -95,24 +97,41 @@ public class PhysicsObject {
         exertGravity = exertG;
     }
 
+    public PhysicsObject(float x, float y, int mass, Vector2 velocity, boolean exertG, boolean doCollisions){
+        posX = x;
+        posY = y;
+        this.mass = mass;
+        force = new Vector2(0,0);
+        forceForDrawing = new Vector2(0,0);
+        this.velocity = velocity;
+        acceleration = new Vector2(0,0);
+        traces = new LinkedList<Vector2>();
+        this.isStatic = false;
+        density = 1;
+        updatePlanetRadius();
+        name = "physics object";
+        exertGravity = exertG;
+        this.doCollisions = doCollisions;
+    }
+
     public void updateKinematics(float deltaTime){
-        if(!isStatic){
+        if(!isStatic) {
             forceForDrawing.set(force);
-            acceleration.x = force.x / (float)mass;
-            acceleration.y = force.y / (float)mass;
+            acceleration.x = force.x / (float) mass;
+            acceleration.y = force.y / (float) mass;
             velocity.x += acceleration.x * deltaTime;
             velocity.y += acceleration.y * deltaTime;
             posX += velocity.x * deltaTime;
             posY += velocity.y * deltaTime;
-
-            if(doTraces){
-                timeElapsed += Math.abs(deltaTime);
-                if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
-                    addPointToTracers(posX, posY);
-                    timeElapsed = 0;
-                }
+        }
+        if(doTraces){
+            timeElapsed += Math.abs(deltaTime);
+            if (timeElapsed >= 1/(tracerFrequency * 1.0f)){
+                addPointToTracers(posX, posY);
+                timeElapsed = 0;
             }
         }
+
     }
 
     public void updateGravity(PhysicsObject obj, float deltaTime){
@@ -239,5 +258,17 @@ public class PhysicsObject {
 
     public boolean getExertGravity() {
         return exertGravity;
+    }
+
+    public boolean isDoCollisions() {
+        return doCollisions;
+    }
+
+    public void setDoCollisions(boolean doCollisions) {
+        this.doCollisions = doCollisions;
+    }
+
+    public void setStatic(boolean aStatic) {
+        isStatic = aStatic;
     }
 }

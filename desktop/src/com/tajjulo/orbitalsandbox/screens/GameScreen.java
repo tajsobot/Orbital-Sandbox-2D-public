@@ -18,6 +18,8 @@ import com.tajjulo.orbitalsandbox.game.PhysicsSpace;
 import com.tajjulo.orbitalsandbox.tools.PlanetMap;
 import com.tajjulo.orbitalsandbox.ui.UiCenter;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CancellationException;
 
@@ -42,6 +44,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 	private String clickState;
 	int massSpawning = 0;
 	int flinging = 0; // 0 pomeni ni flinganja, 1 pomeni zacetek , 2 pomeni v postopku
+	PhysicsObject flingingObject;
+
 
 	public GameScreen(OrbitalSandbox game) {
 		this.game = game;
@@ -111,7 +115,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 		spaceStage.draw();
 		uiStage.draw();
 		uiCenter.doPlanetInfoLabels();
-
 	}
 
 	@Override
@@ -169,14 +172,14 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 			}
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-			Gdx.app.exit();
+			game.setScreen(new MainMenuScreen(game));
 		}
 	}
 
 	private int timeScaleSaved = 1;
 	public void doInputsSimulation(){
 		//todo fling mechanic
-		if(Gdx.input.isKeyJustPressed(Input.Keys.O)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
 			if (massSpawning == 0) {
 				massSpawning = 1;
 				uiCenter.setChangingText("mass spawning enabled");
@@ -188,24 +191,27 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
 			}
 		}
+
+		//todo flinging
 		if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
-			if (massSpawning == 0) {
-				massSpawning = 1;
-				uiCenter.setChangingText("mass spawning enabled");
+			if (flinging == 0) {
+				flinging = 1;
+				uiCenter.setChangingText("flinging enabled");
 
 			}
-			else if(massSpawning == 1){
+			else if(massSpawning != 0){
 				massSpawning = 0;
-				uiCenter.setChangingText("mass spawning disabled");
+				uiCenter.setChangingText("flinging disabled");
 
 			}
 		}
-		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)||Gdx.input.isKeyJustPressed(Input.Keys.I)){
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ADD)||Gdx.input.isKeyJustPressed(Input.Keys.PERIOD)){
 			if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
 				increaseTime(10);
 			}else increaseTime(1);
 		}
-		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT) ||Gdx.input.isKeyJustPressed(Input.Keys.U)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_SUBTRACT) ||Gdx.input.isKeyJustPressed(Input.Keys.COMMA)){
 			if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
 				increaseTime(-10);
 			}else increaseTime(-1);
@@ -338,18 +344,36 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
 	@Override public boolean touchDragged (int screenX, int screenY, int pointer) {
 		System.out.println(screenX + "  " + screenY +"  "+ pointer);
-
 		Vector3 clickPos = new Vector3(screenX, screenY, 0);
 		camera.unproject(clickPos);
 
+
+
 		if(massSpawning == 1){
 			space.addObject(new PhysicsObject(clickPos.x, clickPos.y, 1, new Vector2(0,0), false));
+		}
+		//prvi click
+		if(flinging == 1){
+			flingingObject = new PhysicsObject(clickPos.x, clickPos.y, 1, new Vector2(0,0), true, false);
+			flingingObject.setStatic(true);
+			space.addObject(flingingObject);
+			flinging = 2;
+		}
+		if(flinging == 2){
+			flingingObject.setPosX(clickPos.x);
+			flingingObject.setPosY(clickPos.y);
+
 		}
 
 		return true;
 	}
 
+	LinkedList<Vector2> flingingPositionsList;
 	@Override public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+		if(flinging == 2){
+			uiCenter.setChangingText("flinging done - flinging disabled");
+			flinging = 0;
+		}
 		return true;
 	}
 
