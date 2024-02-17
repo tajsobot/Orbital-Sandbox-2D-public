@@ -359,7 +359,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 			space.addObject(flingingObject);
 			flinging = 2;
 		}
-		//b
+		//ba
 		if(flinging == 2){
 			flingingObject.setPosX(clickPos.x);
 			flingingObject.setPosY(clickPos.y);
